@@ -15,6 +15,7 @@ class TrafficSim {
 	public:
 		TrafficSim();
 		TrafficSim(string file);
+		bool NSGreen();
 		void DoRun();
 
 

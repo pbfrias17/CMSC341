@@ -13,6 +13,10 @@ TrafficSim::TrafficSim()
 TrafficSim::TrafficSim(string file)
 :inputFile(file) {}
 
+bool TrafficSim::NSGreen() {
+
+}
+
 void TrafficSim::DoRun() {
 	string line;
 	cout << "Opening: " << inputFile << endl;
@@ -77,12 +81,12 @@ void TrafficSim::DoRun() {
 	queue <Vehicle> westbound;
 
 	///Will need this later doe
-	/*for(int i = 0; i < 2; i++) {
+	for(int i = 0; i < 2; i++) {
 		northbound.push(Vehicle('c', 0));
 		southbound.push(Vehicle('c', 0));
 		eastbound.push(Vehicle('c', 0));
 		westbound.push(Vehicle('c', 0));
-	}*/
+	}
 
 	int northCarPushTime = 60 / IFR.getNorthCarRate();
 	int southCarPushTime = 60 / IFR.getSouthCarRate();
@@ -105,7 +109,82 @@ void TrafficSim::DoRun() {
 
 	cout << "trucks will enter eb lane every " << eastTruckPushTime << " seconds\n";
 
-	for(int i = 0; i <= 120; i++) {
+	for(int i = 1; i <= 65; i++) {
+		int NSTimer = 0; // Must keep track of how long it's been since car has crossed each intersection
+		int EWTimer = 0;
+		cout << "Clock at: " << i << endl;
+
+		/********************/
+		/* POP OUTTA QUEUES */
+		/********************/
+		// if NS green
+		if(!northbound.empty()) {
+			Vehicle nbVehicle = northbound.front();
+			if(nbVehicle.getType() == 'c') {
+				northbound.pop();
+			} else {
+				static int nbTimer = 1;
+
+				if(nbTimer == 0) {
+					northbound.pop();
+					nbTimer = 1; // reset timer for next truck
+				} else {
+					nbTimer--;
+				}
+			}
+		}
+		if(!southbound.empty()) {
+			Vehicle sbVehicle = southbound.front();
+			if(sbVehicle.getType() == 'c') {
+				southbound.pop();
+			} else {
+				static int sbTimer = 1;
+
+				if(sbTimer == 0) {
+					southbound.pop();
+					sbTimer = 1; // reset timer for next truck
+				} else {
+					sbTimer--;
+				}
+			}
+		}
+		// if EW green
+		if(!eastbound.empty()) {
+			Vehicle ebVehicle = eastbound.front();
+			if(ebVehicle.getType() == 'c') {
+				eastbound.pop();
+			} else {
+				static int ebTimer = 1;
+
+				if(ebTimer == 0) {
+					eastbound.pop();
+					ebTimer = 1; // reset timer for next truck
+				} else {
+					ebTimer--;
+				}
+			}
+		}
+		if(!westbound.empty()) {
+			Vehicle wbVehicle = westbound.front();
+			if(wbVehicle.getType() == 'c') {
+				westbound.pop();
+			} else {
+				static int wbTimer = 1;
+
+				if(wbTimer == 0) {
+					westbound.pop();
+					wbTimer = 1; // reset timer for next truck
+				} else {
+					wbTimer--;
+				}
+			}
+		}
+
+
+		/********************/
+		/* PUSH INTO QUEUES */
+		/********************/
+		// cars arrive first
 		if(i == northCarPushTime) {
 			nbCars++;
 			northCarPushTime += northCarPushTime / nbCars;
@@ -126,6 +205,7 @@ void TrafficSim::DoRun() {
 			westCarPushTime += westCarPushTime / wbCars;
 			westbound.push(Vehicle('c', i));
 		}
+		// then trucks arrive
 		if(i == northTruckPushTime) {
 			nbTrucks++;
 			northTruckPushTime += northTruckPushTime / nbTrucks;
@@ -148,13 +228,11 @@ void TrafficSim::DoRun() {
 		}
 
 		// create a printIntersection() function to do this!!!
-		cout << "Clock at: " << i << endl;
 		cout << "\tnorthbound: " << northbound.size();
 		cout << "\tsouthbound: " << southbound.size();
 		cout << "\teastbound: " << eastbound.size();
 		cout << "\twestbound: " << westbound.size() << endl << endl;
 		////////////////////////////////////////////////////////////
-
 
 	}
 
