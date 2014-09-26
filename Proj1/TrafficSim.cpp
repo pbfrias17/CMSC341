@@ -13,8 +13,36 @@ TrafficSim::TrafficSim()
 TrafficSim::TrafficSim(string file)
 :inputFile(file) {}
 
-bool TrafficSim::NSGreen() {
+int TrafficSim::getNSDuration() {
+	return NSDuration;
+}
 
+int TrafficSim::getEWDuration() {
+	return EWDuration;
+}
+
+void TrafficSim::setNSDuration(int duration) {
+	NSDuration = duration;
+}
+
+void TrafficSim::setEWDuration(int duration) {
+	EWDuration = duration;
+}
+
+bool TrafficSim::NSGreen() {
+	// EWTimer should be 30 max
+	if (EWTimer >= 30) {
+		return true;
+	} 
+	if (EWTimer >= 10) {
+		if (northbound.empty() && eastbound.empty()) {
+			return true;
+		}
+	}
+	if (NSTimer >= 60) {
+		return false;
+	}
+	return false;
 }
 
 void TrafficSim::DoRun() {
@@ -75,10 +103,10 @@ void TrafficSim::DoRun() {
 	cout << "Input file now stored into IntersectionFlowRate: Starting sim... \n";
 
 	//initialize queues (2 cars start in each lane)
-	queue <Vehicle> northbound;
+	/*queue <Vehicle> northbound;
 	queue <Vehicle> southbound;
 	queue <Vehicle> eastbound;
-	queue <Vehicle> westbound;
+	queue <Vehicle> westbound;*/
 
 	///Will need this later doe
 	for(int i = 0; i < 2; i++) {
@@ -110,8 +138,8 @@ void TrafficSim::DoRun() {
 	cout << "trucks will enter eb lane every " << eastTruckPushTime << " seconds\n";
 
 	for(int i = 1; i <= 65; i++) {
-		int NSTimer = 0; // Must keep track of how long it's been since car has crossed each intersection
-		int EWTimer = 0;
+		int NSDuration = 0; //Keep track of how long lights are green
+		int EWDuration = 0;
 		cout << "Clock at: " << i << endl;
 
 		/********************/
@@ -142,13 +170,17 @@ void TrafficSim::DoRun() {
 
 				if(sbTimer == 0) {
 					southbound.pop();
-					sbTimer = 1; // reset timer for next truck
+					sbTimer = 1; //reset timer for next truck
 				} else {
 					sbTimer--;
 				}
 			}
 		}
+		NSDuration++;
+
+
 		// if EW green
+		NSDuration = 0;
 		if(!eastbound.empty()) {
 			Vehicle ebVehicle = eastbound.front();
 			if(ebVehicle.getType() == 'c') {
@@ -179,6 +211,7 @@ void TrafficSim::DoRun() {
 				}
 			}
 		}
+		EWDuration++;
 
 
 		/********************/
