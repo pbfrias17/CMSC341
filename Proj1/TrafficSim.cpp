@@ -141,7 +141,7 @@ void TrafficSim::DoRun() {
 
 	//cout << "trucks will enter eb lane every " << eastTruckPushTime << " seconds\n";
 
-	for(int i = 1; i <= 65; i++) {
+	for(int i = 1; i <= 120; i++) {
 		cout << "Clock at: " << i << endl;
 
 		/********************/
@@ -224,6 +224,48 @@ void TrafficSim::DoRun() {
 				}
 			}
 			EWDuration++;
+			cout << "EWDuration = " << EWDuration << endl;
+		}
+
+		//Light changes based on these conditionals
+		//MAKE CONSTANTS! NO MAGIC NUMBERS!
+		if (EWDuration >= 30) {
+			cout << "NSGreen because EW was green for " << EWDuration << "seconds\n";
+			NSGreen = true;
+			EWDuration = 0;
+		}
+		else {
+			if (EWDuration >= 10) {
+				if (eastbound.empty() && westbound.empty()) {
+					cout << "NSGreen because EW was green for " << EWDuration << "seconds with no cars in their lanes!!\n";
+					NSGreen = true;
+					EWDuration = 0;
+				}
+				else {
+					cout << "NSRed because EW not at 30 seconds yet but still has cars in their lanes\n";
+					NSGreen = false;
+					NSDuration = 0;
+				}
+			}
+			if (EWDuration < 10 && EWDuration > 0) {
+				cout << "NSGreen because EW must be green for atleast 10 seconds\n";
+				NSGreen = false;
+				NSDuration = 0;
+			}
+			if (NSDuration >= 60) {
+				cout << "NSRed cuz NS can only be green for 60 seconds max\n";
+				NSGreen = false;
+				NSDuration = 0;
+			}
+			else {
+				if (NSDuration >= 30) {
+					if (northbound.empty() && southbound.empty()) {
+						cout << "NSRed cuz NS was green for " << NSDuration << " seconds and is now empty\n";
+						NSGreen = false;
+						NSDuration = 0;
+					}
+				}
+			}
 		}
 
 
@@ -274,41 +316,6 @@ void TrafficSim::DoRun() {
 		}
 
 
-		//Light changes based on these conditionals
-		//MAKE CONSTANTS! NO MAGIC NUMBERS!
-		if (EWDuration > 30) {
-			cout << "NSGreen because EW was green for " << EWDuration << "seconds\n";
-			NSGreen = true;
-			EWDuration = 0;
-		}
-		else {
-			if (EWDuration > 10) {
-				if (eastbound.empty() && westbound.empty()) {
-					cout << "NSGreen because EW was green for " << EWDuration << "seconds with no cars in their lanes\n";
-					NSGreen = true;
-				}
-				else {
-					cout << "NSRed because EW not at 30 seconds yet but still has cars in their lanes\n";
-					NSGreen = false;
-				}
-			}
-			if (EWDuration < 10 && EWDuration > 0) {
-				cout << "NSGreen because EW must be green for atleast 10 seconds\n";
-				NSGreen = false;
-			}
-			if (NSDuration > 60) {
-				cout << "NSRed cuz NS can only be green for 60 seconds max\n";
-				NSGreen = false;
-			}
-			else {
-				if (NSDuration > 30) {
-					if (northbound.empty() && southbound.empty()) {
-						cout << "NSRed cuz NS was green for " << NSDuration << " seconds and is now empty\n";
-						NSGreen = false;
-					}
-				}
-			}
-		}
 
 		// create a printIntersection() function to do this!!!
 		cout << "\tnorthbound: " << northbound.size();
