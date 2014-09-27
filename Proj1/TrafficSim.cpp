@@ -29,7 +29,7 @@ void TrafficSim::setEWDuration(int duration) {
 	EWDuration = duration;
 }
 
-bool TrafficSim::NSGreen() {
+/*bool TrafficSim::NSGreen() {
 	// EWTimer should be 30 max
 	if (EWTimer >= 30) {
 		return true;
@@ -43,7 +43,7 @@ bool TrafficSim::NSGreen() {
 		return false;
 	}
 	return false;
-}
+}*/
 
 void TrafficSim::DoRun() {
 	string line;
@@ -135,83 +135,96 @@ void TrafficSim::DoRun() {
 	int wbCars = 0;
 	int wbTrucks = 0;
 
-	cout << "trucks will enter eb lane every " << eastTruckPushTime << " seconds\n";
+	int NSDuration = 0; //Keep track of how long lights are green
+	int EWDuration = 0;
+	bool NSGreen = true;
+
+	//cout << "trucks will enter eb lane every " << eastTruckPushTime << " seconds\n";
 
 	for(int i = 1; i <= 65; i++) {
-		int NSDuration = 0; //Keep track of how long lights are green
-		int EWDuration = 0;
 		cout << "Clock at: " << i << endl;
 
 		/********************/
 		/* POP OUTTA QUEUES */
 		/********************/
 		// if NS green
-		if(!northbound.empty()) {
-			Vehicle nbVehicle = northbound.front();
-			if(nbVehicle.getType() == 'c') {
-				northbound.pop();
-			} else {
-				static int nbTimer = 1;
-
-				if(nbTimer == 0) {
+		if (NSGreen) {
+			if (!northbound.empty()) {
+				Vehicle nbVehicle = northbound.front();
+				if (nbVehicle.getType() == 'c') {
 					northbound.pop();
-					nbTimer = 1; // reset timer for next truck
-				} else {
-					nbTimer--;
+				}
+				else {
+					static int nbTimer = 1;
+
+					if (nbTimer == 0) {
+						northbound.pop();
+						nbTimer = 1; // reset timer for next truck
+					}
+					else {
+						nbTimer--;
+					}
 				}
 			}
-		}
-		if(!southbound.empty()) {
-			Vehicle sbVehicle = southbound.front();
-			if(sbVehicle.getType() == 'c') {
-				southbound.pop();
-			} else {
-				static int sbTimer = 1;
-
-				if(sbTimer == 0) {
+			if (!southbound.empty()) {
+				Vehicle sbVehicle = southbound.front();
+				if (sbVehicle.getType() == 'c') {
 					southbound.pop();
-					sbTimer = 1; //reset timer for next truck
-				} else {
-					sbTimer--;
+				}
+				else {
+					static int sbTimer = 1;
+
+					if (sbTimer == 0) {
+						southbound.pop();
+						sbTimer = 1; //reset timer for next truck
+					}
+					else {
+						sbTimer--;
+					}
 				}
 			}
+			NSDuration++;
+			cout << "NSDuration = " << NSDuration << endl;
 		}
-		NSDuration++;
+		else {
 
-
-		// if EW green
-		NSDuration = 0;
-		if(!eastbound.empty()) {
-			Vehicle ebVehicle = eastbound.front();
-			if(ebVehicle.getType() == 'c') {
-				eastbound.pop();
-			} else {
-				static int ebTimer = 1;
-
-				if(ebTimer == 0) {
+			// if EW green
+			if (!eastbound.empty()) {
+				Vehicle ebVehicle = eastbound.front();
+				if (ebVehicle.getType() == 'c') {
 					eastbound.pop();
-					ebTimer = 1; // reset timer for next truck
-				} else {
-					ebTimer--;
 				}
-			}
-		}
-		if(!westbound.empty()) {
-			Vehicle wbVehicle = westbound.front();
-			if(wbVehicle.getType() == 'c') {
-				westbound.pop();
-			} else {
-				static int wbTimer = 1;
+				else {
+					static int ebTimer = 1;
 
-				if(wbTimer == 0) {
-					westbound.pop();
-					wbTimer = 1; // reset timer for next truck
-				} else {
-					wbTimer--;
+					if (ebTimer == 0) {
+						eastbound.pop();
+						ebTimer = 1; // reset timer for next truck
+					}
+					else {
+						ebTimer--;
+					}
 				}
 			}
+			if (!westbound.empty()) {
+				Vehicle wbVehicle = westbound.front();
+				if (wbVehicle.getType() == 'c') {
+					westbound.pop();
+				}
+				else {
+					static int wbTimer = 1;
+
+					if (wbTimer == 0) {
+						westbound.pop();
+						wbTimer = 1; // reset timer for next truck
+					}
+					else {
+						wbTimer--;
+					}
+				}
+			}
+			EWDuration++;
 		}
-		EWDuration++;
 
 
 		/********************/
@@ -258,6 +271,43 @@ void TrafficSim::DoRun() {
 			wbTrucks++;
 			westTruckPushTime += westTruckPushTime / wbTrucks;
 			westbound.push(Vehicle('t', i));
+		}
+
+
+		//Light changes based on these conditionals
+		//MAKE CONSTANTS! NO MAGIC NUMBERS!
+		if (EWDuration > 30) {
+			cout << "NSGreen because EW was green for " << EWDuration << "seconds\n";
+			NSGreen = true;
+			EWDuration = 0;
+		}
+		else {
+			if (EWDuration > 10) {
+				if (eastbound.empty() && westbound.empty()) {
+					cout << "NSGreen because EW was green for " << EWDuration << "seconds with no cars in their lanes\n";
+					NSGreen = true;
+				}
+				else {
+					cout << "NSRed because EW not at 30 seconds yet but still has cars in their lanes\n";
+					NSGreen = false;
+				}
+			}
+			if (EWDuration < 10 && EWDuration > 0) {
+				cout << "NSGreen because EW must be green for atleast 10 seconds\n";
+				NSGreen = false;
+			}
+			if (NSDuration > 60) {
+				cout << "NSRed cuz NS can only be green for 60 seconds max\n";
+				NSGreen = false;
+			}
+			else {
+				if (NSDuration > 30) {
+					if (northbound.empty() && southbound.empty()) {
+						cout << "NSRed cuz NS was green for " << NSDuration << " seconds and is now empty\n";
+						NSGreen = false;
+					}
+				}
+			}
 		}
 
 		// create a printIntersection() function to do this!!!
