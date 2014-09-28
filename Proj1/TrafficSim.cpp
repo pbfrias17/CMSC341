@@ -1,6 +1,8 @@
 #include "TrafficSim.h"
 #include "IntersectionFlowRate.h"
 #include "Vehicle.h"
+#include "ResultVehicle.h"
+#include "Result.h"
 #include <iostream>
 #include <cstdlib>
 #include <queue>
@@ -139,9 +141,14 @@ void TrafficSim::DoRun() {
 	int EWDuration = 0;
 	bool NSGreen = true;
 
+
+	// for our linked list of vehicles passing the intersection
+	Result* resultList;
+	Result* listTraverser;
+
 	//cout << "trucks will enter eb lane every " << eastTruckPushTime << " seconds\n";
 
-	for(int i = 1; i <= 120; i++) {
+	for(int i = 1; i <= 5; i++) {
 		cout << "Clock at: " << i << endl;
 
 		/********************/
@@ -152,6 +159,9 @@ void TrafficSim::DoRun() {
 			if (!northbound.empty()) {
 				Vehicle nbVehicle = northbound.front();
 				if (nbVehicle.getType() == 'c') {
+					Vehicle result = northbound.front();
+					resultList = new Result;
+					resultList->Vehicle = ResultVehicle(result.getType(), 20);
 					northbound.pop();
 				}
 				else {
@@ -318,13 +328,28 @@ void TrafficSim::DoRun() {
 
 
 		// create a printIntersection() function to do this!!!
-		cout << "\tnorthbound: " << northbound.size();
-		cout << "\tsouthbound: " << southbound.size();
-		cout << "\teastbound: " << eastbound.size();
-		cout << "\twestbound: " << westbound.size() << endl << endl;
+		cout << "\tnorthbound: " << northbound.size() << "\tsouthbound: " << southbound.size() << "\teastbound: " << eastbound.size() << "\twestbound: " << westbound.size() << endl << endl;
 		////////////////////////////////////////////////////////////
 
+		cout << "    SB " << southbound.size() << "\n\n\n\n";
+		cout << "EB\n";
+		cout << eastbound.size() << "\tx\n";
+		cout << "      xx xx\n";
+		cout << "  \tx\n";
+		cout << "  \t\tWB\n";
+		cout << "\t\t" << westbound.size() << "\n\n\n\n";
+		cout << "    NB " << northbound.size() << "\n";
+		cout << "at clock:\t" << i << "\n---------------------------\n";
+
 	}
+
+	// Here is our linked list (temp)
+	Result* resultList;
+	Result* iterator;
+
+	resultList = new Result;
+
+
 
 
 	// Use only if IFR will be dynamic
