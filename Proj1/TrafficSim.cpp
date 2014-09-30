@@ -49,6 +49,9 @@ void TrafficSim::setEWDuration(int duration) {
 
 void TrafficSim::DoRun() {
 	string line;
+	Result* resultList;
+	resultList = new Result;
+	Result* iterator;
 	cout << "Opening: " << inputFile << endl;
 
 	ifstream infile;
@@ -143,8 +146,7 @@ void TrafficSim::DoRun() {
 
 
 	// for our linked list of vehicles passing the intersection
-	Result* resultList;
-	Result* listTraverser;
+
 
 	//cout << "trucks will enter eb lane every " << eastTruckPushTime << " seconds\n";
 
@@ -160,8 +162,7 @@ void TrafficSim::DoRun() {
 				Vehicle nbVehicle = northbound.front();
 				if (nbVehicle.getType() == 'c') {
 					Vehicle result = northbound.front();
-					resultList = new Result;
-					resultList->Vehicle = ResultVehicle(result.getType(), 20);
+					resultList->setVehicle(ResultVehicle(result.getType(), 20));
 					northbound.pop();
 				}
 				else {
@@ -344,8 +345,6 @@ void TrafficSim::DoRun() {
 	}
 
 	// Here is our linked list (temp)
-	Result* resultList;
-	Result* iterator;
 
 	resultList = new Result;
 

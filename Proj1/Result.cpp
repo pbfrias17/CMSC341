@@ -1,3 +1,21 @@
 #include "Result.h"
 #include "ResultVehicle.h"
 
+Result::Result()
+	: next(0) {}
+
+ResultVehicle Result::getVehicle() {
+	return vehicle;
+}
+
+Result* Result::getNext() {
+	return next;
+}
+
+void Result::setVehicle(ResultVehicle r_vehicle) {
+	vehicle = r_vehicle;
+}
+
+void Result::setNext(Result* nextPtr) {
+	next = nextPtr;
+}
