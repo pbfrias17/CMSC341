@@ -36,7 +36,6 @@ void TrafficSim::DoRun() {
 	string line;
 	Result* resultList;
 	resultList = new Result;
-	Result* iterator;
 
 	ifstream infile;
 	infile.open(inputFile.c_str(), ios_base::in);
@@ -80,10 +79,8 @@ void TrafficSim::DoRun() {
 		case 11:
 			IFR.setWestTruckRate(atoi(line.c_str()));
 			break;
-
-			counter++;
 		}
-
+			counter++;
 	}
 
 	for (int i = 0; i < 2; i++) {
@@ -122,7 +119,7 @@ void TrafficSim::DoRun() {
 
 	//cout << "trucks will enter eb lane every " << eastTruckPushTime << " seconds\n";
 
-	for (int i = 0; i <= 40; i++) {
+	for (int i = 0; i <= 120; i++) {
 
 		//Do not run simulation until second 1
 		//Still want to print intersection at clock 1 
@@ -301,7 +298,7 @@ void TrafficSim::DoRun() {
 		int ebAmt = eastbound.size();
 		int wbAmt = westbound.size();
 		int nbAmt = northbound.size();
-
+		//nb
 		cout << "     SB " << sbAmt;
 		for (int sb = 1; sb <= 6 - sbAmt; sb++) {
 			if (sb == 6)
@@ -316,8 +313,15 @@ void TrafficSim::DoRun() {
 				cout << "\t  x\n";
 		}
 
-		cout << ebAmt << "  ";
-		for (int eb = 1; eb <= 6 - sbAmt; eb++) {
+		//eb
+		cout << ebAmt;
+		/*
+		if (ebAmt >= 10)
+			cout << " ";
+		else
+			cout << "  ";
+		*/
+		for (int eb = 1; eb <= 6 - ebAmt; eb++) {
 			cout << " ";
 		}
 		for (int eb = 1; eb <= ebAmt; eb++) {
@@ -327,14 +331,16 @@ void TrafficSim::DoRun() {
 				cout << "x";
 		}
 
+		//wb
 		cout << " ";
-		for (int wb = 1; wb <= wbAmt; wb++) {
+		for (int wb = 1; wb <= 6; wb++) {
 			if (wb == 1)
 				cout << westbound.front().getType();
 			else
 				cout << "x";
 		}
 
+		//nb
 		cout << "\n";
 		for (int nb = 1; nb <= nbAmt; nb++) {
 			if (nb == 1)
