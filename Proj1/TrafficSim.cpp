@@ -1,3 +1,16 @@
+/*****************************************
+** File:    TrafficSim.cpp
+** Project: Project 1
+** Author:  Paolo Frias
+** Date:    9/30/2014
+** Section: 03
+** E-mail:  pfrias2@umbc.edu
+
+**   This file contains the implementation for the TrafficSim class
+**TrafficSim is the main file that handles the traffic light simulation
+**using queues and linked lists
+***********************************************/
+
 #include "TrafficSim.h"
 #include "IntersectionFlowRate.h"
 #include "Vehicle.h"
@@ -14,23 +27,6 @@ TrafficSim::TrafficSim()
 
 TrafficSim::TrafficSim(string file)
 :inputFile(file) {}
-
-int TrafficSim::getNSDuration() {
-	return NSDuration;
-}
-
-int TrafficSim::getEWDuration() {
-	return EWDuration;
-}
-
-void TrafficSim::setNSDuration(int duration) {
-	NSDuration = duration;
-}
-
-void TrafficSim::setEWDuration(int duration) {
-	EWDuration = duration;
-}
-
 
 void TrafficSim::DoRun() {
 	string line;
@@ -49,6 +45,8 @@ void TrafficSim::DoRun() {
 
 	IntersectionFlowRate IFR = IntersectionFlowRate();
 
+	//Have to import the info from the input file into
+	//the IntersectionFlowRate object
 	int counter = 0;
 	while (infile >> line) {
 		//getline(infile, line);
@@ -80,12 +78,11 @@ void TrafficSim::DoRun() {
 		case 11:
 			IFR.setWestTruckRate(atoi(line.c_str()));
 			break;
-
-			counter++;
 		}
-
+			counter++;
 	}
 
+	//Each lane starts with 2 cars
 	for (int i = 0; i < 2; i++) {
 		northbound.push(Vehicle('c', 0));
 		southbound.push(Vehicle('c', 0));
@@ -93,6 +90,7 @@ void TrafficSim::DoRun() {
 		westbound.push(Vehicle('c', 0));
 	}
 
+	//Calculate when each lane gets a new vehicle
 	int northCarPushTime = 60 / IFR.getNorthCarRate();
 	int southCarPushTime = 60 / IFR.getSouthCarRate();
 	int eastCarPushTime = 60 / IFR.getEastCarRate();
@@ -102,7 +100,7 @@ void TrafficSim::DoRun() {
 	int eastTruckPushTime = 60 / IFR.getEastTruckRate();
 	int westTruckPushTime = 60 / IFR.getWestTruckRate();
 
-	// for keeping track of time to push
+	//For keeping track of time to push
 	int nbCars = 0;
 	int nbTrucks = 0;
 	int sbCars = 0;
@@ -112,17 +110,13 @@ void TrafficSim::DoRun() {
 	int wbCars = 0;
 	int wbTrucks = 0;
 
-	int NSDuration = 0; //Keep track of how long lights are green
+	//Keep track of how long lights are green
+	int NSDuration = 0;
 	int EWDuration = 0;
 	bool NSGreen = true;
 
-
-	// for our linked list of vehicles passing the intersection
-
-
-	//cout << "trucks will enter eb lane every " << eastTruckPushTime << " seconds\n";
-
-	for (int i = 0; i <= 40; i++) {
+	//start the 120 second loop
+	for (int i = 0; i <= 120; i++) {
 
 		//Do not run simulation until second 1
 		//Still want to print intersection at clock 1 
@@ -130,7 +124,6 @@ void TrafficSim::DoRun() {
 			/********************/
 			/* POP OUTTA QUEUES */
 			/********************/
-			
 			if (NSGreen) {
 				if (!northbound.empty()) {
 					Vehicle nbVehicle = northbound.front();
@@ -138,8 +131,7 @@ void TrafficSim::DoRun() {
 						Vehicle result = northbound.front();
 						resultList->setVehicle(ResultVehicle(result.getType(), 20));
 						northbound.pop();
-					}
-					else {
+					} else {
 						static int nbTimer = 1;
 
 						if (nbTimer == 0) {
@@ -184,7 +176,8 @@ void TrafficSim::DoRun() {
 						if (ebTimer == 0) {
 							eastbound.pop();
 							ebTimer = 1; // reset timer for next truck
-						} else {
+						}
+						else {
 							ebTimer--;
 						}
 					}
@@ -193,13 +186,15 @@ void TrafficSim::DoRun() {
 					Vehicle wbVehicle = westbound.front();
 					if (wbVehicle.getType() == 'c') {
 						westbound.pop();
-					} else {
+					}
+					else {
 						static int wbTimer = 1;
 
 						if (wbTimer == 0) {
 							westbound.pop();
 							wbTimer = 1; // reset timer for next truck
-						} else {
+						}
+						else {
 							wbTimer--;
 						}
 					}
@@ -208,39 +203,32 @@ void TrafficSim::DoRun() {
 			}
 
 			//Light changes based on these conditionals
-			//MAKE CONSTANTS! NO MAGIC NUMBERS!
 			if (EWDuration >= 30) {
-				cout << "NSGreen because EW was green for " << EWDuration << "seconds\n";
 				NSGreen = true;
 				EWDuration = 0;
 			}
 			else {
 				if (EWDuration >= 10) {
 					if (eastbound.empty() && westbound.empty()) {
-						cout << "NSGreen because EW was green for " << EWDuration << "seconds with no cars in their lanes!!\n";
 						NSGreen = true;
 						EWDuration = 0;
 					}
 					else {
-						cout << "NSRed because EW not at 30 seconds yet but still has cars in their lanes\n";
 						NSGreen = false;
 						NSDuration = 0;
 					}
 				}
 				if (EWDuration < 10 && EWDuration > 0) {
-					cout << "NSGreen because EW must be green for atleast 10 seconds\n";
 					NSGreen = false;
 					NSDuration = 0;
 				}
 				if (NSDuration >= 60) {
-					cout << "NSRed cuz NS can only be green for 60 seconds max\n";
 					NSGreen = false;
 					NSDuration = 0;
 				}
 				else {
 					if (NSDuration >= 30) {
 						if (northbound.empty() && southbound.empty()) {
-							cout << "NSRed cuz NS was green for " << NSDuration << " seconds and is now empty\n";
 							NSGreen = false;
 							NSDuration = 0;
 						}
@@ -296,7 +284,7 @@ void TrafficSim::DoRun() {
 			}
 		}
 
-
+		//Now print the intersection
 		int sbAmt = southbound.size();
 		int ebAmt = eastbound.size();
 		int wbAmt = westbound.size();
@@ -311,13 +299,18 @@ void TrafficSim::DoRun() {
 		}
 		for (int sb = 1; sb <= sbAmt; sb++) {
 			if (sb == sbAmt)
-				cout << "EB        " << southbound.front().getType() << "\n";
+				cout << "EB         " << southbound.front().getType() << "\n";
 			else
-				cout << "\t  x\n";
+				cout << "\t   x\n";
 		}
 
 		cout << ebAmt << "  ";
-		for (int eb = 1; eb <= 6 - sbAmt; eb++) {
+		if (ebAmt >= 10)
+			cout << " ";
+		else
+			cout << "  ";
+
+		for (int eb = 1; eb <= 6 - ebAmt; eb++) {
 			cout << " ";
 		}
 		for (int eb = 1; eb <= ebAmt; eb++) {
@@ -325,6 +318,8 @@ void TrafficSim::DoRun() {
 				cout << eastbound.front().getType();
 			else
 				cout << "x";
+			if (eb == 6)
+				break;
 		}
 
 		cout << " ";
@@ -334,34 +329,29 @@ void TrafficSim::DoRun() {
 			else
 				cout << "x";
 		}
+		for (int wb = 1; wb <= 6 - wbAmt; wb++) {
+			cout << " ";
+		}
+		cout << "  " << wbAmt;
 
 		cout << "\n";
 		for (int nb = 1; nb <= nbAmt; nb++) {
 			if (nb == 1)
-				cout << "\t  " << northbound.front().getType() << "\tWB\n";
+				cout << "\t   " << northbound.front().getType() << "\tWB\n";
 			else
-				cout << "\t  x\n";
+				cout << "\t   x\n";
 		}
 		if (nbAmt == 0)
-			cout << "\t  \tWB";
+			cout << "\t  \t    WB";
 		for (int nb = 1; nb < 6 - nbAmt - 1; nb++) {
 			cout << "\n";
 		}
+		cout << "\n     SB " << sbAmt << "\n";
 
 		cout << "at clock: " << i << "\n---------------------------\n";
 
 	}
 
-	// Here is our linked list (temp)
-
-
-
 	delete resultList;
 	resultList = NULL;
-
-	// Use only if IFR will be dynamic
-	//delete IFR;
-	//IFR = NULL;
-	cin >> stopper;
-	
 }
