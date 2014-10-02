@@ -123,7 +123,7 @@ void TrafficSim::DoRun() {
 	bool NSGreen = true;
 
 	//start the 120 second loop
-	for (int i = 0; i <= 100; i++) {
+	for (int i = 0; i <= 120; i++) {
 
 		//Do not run simulation until second 1
 		//Still want to print intersection at clock 1 
