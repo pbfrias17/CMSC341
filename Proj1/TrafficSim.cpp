@@ -123,7 +123,7 @@ void TrafficSim::DoRun() {
 	bool NSGreen = true;
 
 	//start the 120 second loop
-	for (int i = 0; i <= 120; i++) {
+	for (int i = 0; i <= 100; i++) {
 
 		//Do not run simulation until second 1
 		//Still want to print intersection at clock 1 
@@ -134,8 +134,9 @@ void TrafficSim::DoRun() {
 			if (NSGreen) {
 				if (!northbound.empty()) {
 					Vehicle nbVehicle = northbound.front();
+					int timeSpent = i - nbVehicle.getTimeEntered();
 					if (nbVehicle.getType() == 'c') {
-						iterator->setVehicle(ResultVehicle(nbVehicle.getType(), 20));
+						iterator->setVehicle(ResultVehicle(nbVehicle.getType(), timeSpent));
 						iterator->setNext(new Result);
 						iterator = iterator->getNext();
 						iterator->setNext(NULL);
@@ -144,7 +145,7 @@ void TrafficSim::DoRun() {
 						static int nbTimer = 1;
 
 						if (nbTimer == 0) {
-							iterator->setVehicle(ResultVehicle(nbVehicle.getType(), 20));
+							iterator->setVehicle(ResultVehicle(nbVehicle.getType(), timeSpent));
 							iterator->setNext(new Result);
 							iterator = iterator->getNext();
 							iterator->setNext(NULL);
@@ -158,8 +159,9 @@ void TrafficSim::DoRun() {
 				}
 				if (!southbound.empty()) {
 					Vehicle sbVehicle = southbound.front();
+					int timeSpent = i - sbVehicle.getTimeEntered();
 					if (sbVehicle.getType() == 'c') {
-						iterator->setVehicle(ResultVehicle(sbVehicle.getType(), 20));
+						iterator->setVehicle(ResultVehicle(sbVehicle.getType(), timeSpent));
 						iterator->setNext(new Result);
 						iterator = iterator->getNext();
 						iterator->setNext(NULL);
@@ -169,7 +171,7 @@ void TrafficSim::DoRun() {
 						static int sbTimer = 1;
 
 						if (sbTimer == 0) {
-							iterator->setVehicle(ResultVehicle(sbVehicle.getType(), 20));
+							iterator->setVehicle(ResultVehicle(sbVehicle.getType(), timeSpent));
 							iterator->setNext(new Result);
 							iterator = iterator->getNext();
 							iterator->setNext(NULL);
@@ -188,8 +190,9 @@ void TrafficSim::DoRun() {
 				// if EW green
 				if (!eastbound.empty()) {
 					Vehicle ebVehicle = eastbound.front();
+					int timeSpent = i - ebVehicle.getTimeEntered();
 					if (ebVehicle.getType() == 'c') {
-						iterator->setVehicle(ResultVehicle(ebVehicle.getType(), 20));
+						iterator->setVehicle(ResultVehicle(ebVehicle.getType(), timeSpent));
 						iterator->setNext(new Result);
 						iterator = iterator->getNext();
 						iterator->setNext(NULL);
@@ -199,7 +202,7 @@ void TrafficSim::DoRun() {
 						static int ebTimer = 1;
 
 						if (ebTimer == 0) {
-							iterator->setVehicle(ResultVehicle(ebVehicle.getType(), 20));
+							iterator->setVehicle(ResultVehicle(ebVehicle.getType(), timeSpent));
 							iterator->setNext(new Result);
 							iterator = iterator->getNext();
 							iterator->setNext(NULL);
@@ -213,8 +216,9 @@ void TrafficSim::DoRun() {
 				}
 				if (!westbound.empty()) {
 					Vehicle wbVehicle = westbound.front();
+					int timeSpent = i - wbVehicle.getTimeEntered();
 					if (wbVehicle.getType() == 'c') {
-						iterator->setVehicle(ResultVehicle(wbVehicle.getType(), 20));
+						iterator->setVehicle(ResultVehicle(wbVehicle.getType(), timeSpent));
 						iterator->setNext(new Result);
 						iterator = iterator->getNext();
 						iterator->setNext(NULL);
@@ -224,7 +228,7 @@ void TrafficSim::DoRun() {
 						static int wbTimer = 1;
 
 						if (wbTimer == 0) {
-							iterator->setVehicle(ResultVehicle(wbVehicle.getType(), 20));
+							iterator->setVehicle(ResultVehicle(wbVehicle.getType(), timeSpent));
 							iterator->setNext(new Result);
 							iterator = iterator->getNext();
 							iterator->setNext(NULL);
@@ -391,6 +395,7 @@ void TrafficSim::DoRun() {
 	int count = 0;
 	int car_count = 0;
 	int truck_count = 0;
+	int overallTime = 0;
 	iterator = resultList;
 	if (iterator != 0) {
 		while (iterator->getNext() != NULL) {
@@ -400,28 +405,33 @@ void TrafficSim::DoRun() {
 			else
 				truck_count++;
 
+			int timeSpent = resultVehicle.getTimeSpent();
+			overallTime += timeSpent;
 			iterator = iterator->getNext();
 			count++;
+
 		}
+		//For the last element of the linked list
 		ResultVehicle resultVehicle = iterator->getVehicle();
 		if (resultVehicle.getType() == 'c')
 			car_count++;
 		else
 			truck_count++;
+		
 		count++;
 	}
+
+	double timePer = overallTime / count;
 
 	cout << "\n::| Simulation Statistics |::\n";
 	cout << "Amount of vehicles that crossed intersection: " << count << "\n";
 	cout << "Amount of cars that crossed intersection: " << car_count << "\n";
 	cout << "Amount of trucks that crossed intersection: " << truck_count << "\n";
+	cout << "Average amount of time each vehicle spent waiting: " << timePer << " seconds\n";
 
 	delete resultList;
 	resultList = NULL;
 
 	delete iterator;
 	iterator = NULL;
-
-	char stopper;
-	cin >> stopper;
 }

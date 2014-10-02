@@ -15,7 +15,6 @@ Result* Result::getNext() {
 
 void Result::setVehicle(ResultVehicle r_vehicle) {
 	vehicle = r_vehicle;
-	//setNext(new Result);
 }
 
 void Result::setNext(Result* nextPtr) {
