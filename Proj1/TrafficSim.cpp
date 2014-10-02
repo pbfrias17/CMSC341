@@ -32,7 +32,14 @@ void TrafficSim::DoRun() {
 	string line;
 	Result* resultList;
 	resultList = new Result;
+	resultList->setVehicle(ResultVehicle());
+	resultList->setNext(NULL);
 	Result* iterator;
+	iterator = resultList;
+	iterator->setNext(new Result);
+	iterator = iterator->getNext();
+	iterator->setVehicle(ResultVehicle());
+	iterator->setNext(NULL);
 
 	ifstream infile;
 	infile.open(inputFile.c_str(), ios_base::in);
@@ -128,13 +135,19 @@ void TrafficSim::DoRun() {
 				if (!northbound.empty()) {
 					Vehicle nbVehicle = northbound.front();
 					if (nbVehicle.getType() == 'c') {
-						Vehicle result = northbound.front();
-						resultList->setVehicle(ResultVehicle(result.getType(), 20));
+						iterator->setVehicle(ResultVehicle(nbVehicle.getType(), 20));
+						iterator->setNext(new Result);
+						iterator = iterator->getNext();
+						iterator->setNext(NULL);
 						northbound.pop();
 					} else {
 						static int nbTimer = 1;
 
 						if (nbTimer == 0) {
+							iterator->setVehicle(ResultVehicle(nbVehicle.getType(), 20));
+							iterator->setNext(new Result);
+							iterator = iterator->getNext();
+							iterator->setNext(NULL);
 							northbound.pop();
 							nbTimer = 1; // reset timer for next truck
 						}
@@ -146,12 +159,20 @@ void TrafficSim::DoRun() {
 				if (!southbound.empty()) {
 					Vehicle sbVehicle = southbound.front();
 					if (sbVehicle.getType() == 'c') {
+						iterator->setVehicle(ResultVehicle(sbVehicle.getType(), 20));
+						iterator->setNext(new Result);
+						iterator = iterator->getNext();
+						iterator->setNext(NULL);
 						southbound.pop();
 					}
 					else {
 						static int sbTimer = 1;
 
 						if (sbTimer == 0) {
+							iterator->setVehicle(ResultVehicle(sbVehicle.getType(), 20));
+							iterator->setNext(new Result);
+							iterator = iterator->getNext();
+							iterator->setNext(NULL);
 							southbound.pop();
 							sbTimer = 1; //reset timer for next truck
 						}
@@ -168,12 +189,20 @@ void TrafficSim::DoRun() {
 				if (!eastbound.empty()) {
 					Vehicle ebVehicle = eastbound.front();
 					if (ebVehicle.getType() == 'c') {
+						iterator->setVehicle(ResultVehicle(ebVehicle.getType(), 20));
+						iterator->setNext(new Result);
+						iterator = iterator->getNext();
+						iterator->setNext(NULL);
 						eastbound.pop();
 					}
 					else {
 						static int ebTimer = 1;
 
 						if (ebTimer == 0) {
+							iterator->setVehicle(ResultVehicle(ebVehicle.getType(), 20));
+							iterator->setNext(new Result);
+							iterator = iterator->getNext();
+							iterator->setNext(NULL);
 							eastbound.pop();
 							ebTimer = 1; // reset timer for next truck
 						}
@@ -185,12 +214,20 @@ void TrafficSim::DoRun() {
 				if (!westbound.empty()) {
 					Vehicle wbVehicle = westbound.front();
 					if (wbVehicle.getType() == 'c') {
+						iterator->setVehicle(ResultVehicle(wbVehicle.getType(), 20));
+						iterator->setNext(new Result);
+						iterator = iterator->getNext();
+						iterator->setNext(NULL);
 						westbound.pop();
 					}
 					else {
 						static int wbTimer = 1;
 
 						if (wbTimer == 0) {
+							iterator->setVehicle(ResultVehicle(wbVehicle.getType(), 20));
+							iterator->setNext(new Result);
+							iterator = iterator->getNext();
+							iterator->setNext(NULL);
 							westbound.pop();
 							wbTimer = 1; // reset timer for next truck
 						}
@@ -351,7 +388,40 @@ void TrafficSim::DoRun() {
 		cout << "at clock: " << i << "\n---------------------------\n";
 
 	}
+	int count = 0;
+	int car_count = 0;
+	int truck_count = 0;
+	iterator = resultList;
+	if (iterator != 0) {
+		while (iterator->getNext() != NULL) {
+			ResultVehicle resultVehicle = iterator->getVehicle();
+			if (resultVehicle.getType() == 'c')
+				car_count++;
+			else
+				truck_count++;
+
+			iterator = iterator->getNext();
+			count++;
+		}
+		ResultVehicle resultVehicle = iterator->getVehicle();
+		if (resultVehicle.getType() == 'c')
+			car_count++;
+		else
+			truck_count++;
+		count++;
+	}
+
+	cout << "\n::| Simulation Statistics |::\n";
+	cout << "Amount of vehicles that crossed intersection: " << count << "\n";
+	cout << "Amount of cars that crossed intersection: " << car_count << "\n";
+	cout << "Amount of trucks that crossed intersection: " << truck_count << "\n";
 
 	delete resultList;
 	resultList = NULL;
+
+	delete iterator;
+	iterator = NULL;
+
+	char stopper;
+	cin >> stopper;
 }

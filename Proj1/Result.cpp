@@ -1,5 +1,6 @@
 #include "Result.h"
 #include "ResultVehicle.h"
+#include <iostream>
 
 Result::Result()
 	: next(0) {}
@@ -14,6 +15,7 @@ Result* Result::getNext() {
 
 void Result::setVehicle(ResultVehicle r_vehicle) {
 	vehicle = r_vehicle;
+	//setNext(new Result);
 }
 
 void Result::setNext(Result* nextPtr) {
