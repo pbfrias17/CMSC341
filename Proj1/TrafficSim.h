@@ -1,3 +1,15 @@
+/*****************************************
+** File:    TrafficSim.h
+** Project: Project 1
+** Author:  Paolo Frias
+** Date:    9/30/2014
+** Section: 03
+** E-mail:  pfrias2@umbc.edu
+
+**   This file contains the TrafficSim class definition
+**It has all the methods and members
+***********************************************/
+
 #ifndef TRAFFICSIM_H
 #define TRAFFICSIM_H
 
@@ -15,24 +27,30 @@ class TrafficSim {
 		queue <Vehicle> southbound;
 		queue <Vehicle> eastbound;
 		queue <Vehicle> westbound;
-		int NSDuration;
-		int EWDuration;
 		string inputFile;
-		int stopper; //DELETE WHEN DONE
 
 	public:
+		//---------------------------------------------------------
+		// Name: TrafficSim (default constructor)
+		// PreCondition:  None
+		// PostCondition: Creates an instance of TrafficSim class 
+		//---------------------------------------------------------
 		TrafficSim();
+
+		//---------------------------------------------------------
+		// Name: TrafficSim (alternative constructor)
+		// PreCondition:  None
+		// PostCondition: Creates an instance of TrafficSim class
+		// with string filename
+		//---------------------------------------------------------
 		TrafficSim(string file);
-		int getNSDuration();
-		int getEWDuration();
-		void setNSDuration(int duration);
-		void setEWDuration(int duration);
-		bool NSGreen();
+
+		//---------------------------------------------------------
+		// Name: DoRun
+		// PreCondition:  None
+		// PostCondition: Starts the simluation process
+		//---------------------------------------------------------
 		void DoRun();
-
-
-
-
 };
 
 #endif //TRAFFICSIM_H

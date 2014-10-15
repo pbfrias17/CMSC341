@@ -1,5 +1,6 @@
 #include "Result.h"
 #include "ResultVehicle.h"
+#include <iostream>
 
 Result::Result()
 	: next(0) {}
