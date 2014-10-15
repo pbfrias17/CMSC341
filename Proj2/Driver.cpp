@@ -34,17 +34,17 @@ int main(int argc, char *argv[]) {
             string inFilterFile = argv[1]; //Filter file.
             string inDataFile = argv[2];   //Data file.
             
-        //try {
+        try {
             Indexer *index = new Indexer(inFilterFile, inDataFile);
             index->DoIndex();
             delete index;
             index = NULL;
-        //}
+        }
         //Something went wrong.
-		//catch (Exceptions &cException) {
-        //    cout << "EXCEPTION: " << cException.GetMessage() << endl;
-        //    return 1;
-        //}
+		catch (Exceptions &cException) {
+            cout << "EXCEPTION: " << cException.GetMessage() << endl;
+            return 1;
+        }
     }
     //Uncomment for number of seconds running.
     //cout << clock() / (float)CLOCKS_PER_SEC) << endl;
