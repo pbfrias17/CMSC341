@@ -51,7 +51,7 @@ void TrafficSim::DoRun() {
 	string line;
 	Result* resultList;
 	resultList = new Result;
-	Result* iterator;
+	//Result* iterator;
 	cout << "Opening: " << inputFile << endl;
 
 	ifstream infile;
