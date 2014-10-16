@@ -3,6 +3,9 @@
 
 #include <string>
 #include <iostream>
+#include <fstream>
+#include <cstdlib>
+
 using namespace std;
 
 class Indexer {
@@ -12,8 +15,8 @@ public:
 	void DoIndex();
 
 private:
-	string filterFile;
-	string dataFile;
+	string filterFilename;
+	string dataFilename;
 
 };
 
