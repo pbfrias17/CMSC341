@@ -97,7 +97,7 @@ public:
      */
     void insert( const Comparable & x ) {
         insert( x, root );
-    }
+	}
 
     /**
      * Remove x from the tree. Nothing is done if x is not found.
@@ -148,6 +148,7 @@ private:
      */
     void insert( const Comparable & x, BinaryNode * & t )
     {
+		
         if( t == NULL )
             t = new BinaryNode( x, NULL, NULL );
         else if( x < t->element )
