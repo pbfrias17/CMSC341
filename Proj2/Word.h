@@ -8,7 +8,10 @@ class Word {
 public:
 	Word();
 	Word(string word);
-	int getCount();
+	int getCount() const;
+	string getWordString() const;
+	friend bool operator< (const Word &lhs, const Word &rhs);
+	friend bool operator> (const Word &lhs, const Word &rhs);
 private:
 	string wordString;
 	int count;

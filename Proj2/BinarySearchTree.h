@@ -148,8 +148,8 @@ private:
      */
     void insert( const Comparable & x, BinaryNode * & t )
     {
-		
-        if( t == NULL )
+		cout << "\tInserting into filteredBST\n";
+		if (t == NULL)
             t = new BinaryNode( x, NULL, NULL );
         else if( x < t->element )
             insert( x, t->left );

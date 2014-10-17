@@ -63,11 +63,10 @@ template <typename Comparable> BinarySearchTree<Comparable> Indexer::FileFilterR
 
 	string word;
 	while (filterFile >> word) {
-		cout << word << endl;
+		cout << "Look at: " << word << endl;
 		//convert string word into Word object
 		Word word = Word(word);
-		//cout << word.getCount();
-		filteredBST->insert(Word());
+		filteredBST->insert(word);
 	}
 
 	filterFile.close();
