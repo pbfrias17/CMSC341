@@ -21,7 +21,7 @@ private:
 	string filterFilename;
 	string dataFilename;
 	bool FileExists(const string& filename);
-	BinarySearchTree<Comparable> FileFilterReader(string filename);
+	template <typename Comparable> BinarySearchTree<Comparable> FileFilterReader(string filename);
 	//BinarySearchTree FileWordReader(string filename);
 	void OutputResults();
 

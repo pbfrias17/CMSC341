@@ -1,5 +1,6 @@
 #include "Indexer.h"
 #include "BinarySearchTree.h"
+#include "Word.h"
 
 Indexer::Indexer()
 : filterFilename("gsl.txt"), dataFilename("data.txt") {}
@@ -59,7 +60,7 @@ void Indexer::DoIndex() {
 }
 
 
-BinarySearchTree<Comparable> Indexer::FileFilterReader(string filename) {
+template <typename Comparable> BinarySearchTree<Comparable> Indexer::FileFilterReader(string filename) {
 	cout << "Creating a BST of Filterwords from " << filename << endl;
-	return BinarySearchTree<Comparable>();
+	return BinarySearchTree<Word>();
 }
