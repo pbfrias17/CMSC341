@@ -1,4 +1,5 @@
 #include "Indexer.h"
+#include "BinarySearchTree.h"
 
 Indexer::Indexer()
 : filterFilename("gsl.txt"), dataFilename("data.txt") {}
@@ -12,6 +13,8 @@ void Indexer::DoIndex() {
 	////////
 	cout << "Filter file: " << filterFilename << endl;
 	cout << "Data file: " << dataFilename << endl;
+
+	//This should all be in filterFileReader methods
 	ifstream filterFile;
 	ifstream dataFile;
 	filterFile.open(filterFilename.c_str(), ios_base::in);
@@ -30,7 +33,7 @@ void Indexer::DoIndex() {
 	while(filterFile >> word) {
 		cout << word << endl;
 	}
-	*/
+	
 
 	if(dataFile.fail()) {
 		cout << "Failed to open file: " << dataFilename << endl;
@@ -42,9 +45,21 @@ void Indexer::DoIndex() {
 	while(dataFile >> word) {
 		cout << word << endl;
 	}
+	*/
+
+
+
+
+
 
 	filterFile.close();
 	dataFile.close();
 
 	cin >> stopper;
+}
+
+
+BinarySearchTree<Comparable> Indexer::FileFilterReader(string filename) {
+	cout << "Creating a BST of Filterwords from " << filename << endl;
+	return BinarySearchTree<Comparable>();
 }

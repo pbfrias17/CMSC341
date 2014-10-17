@@ -6,6 +6,8 @@
 #include <fstream>
 #include <cstdlib>
 
+#include "BinarySearchTree.h"
+
 using namespace std;
 
 class Indexer {
@@ -14,9 +16,15 @@ public:
 	Indexer(string filter, string data);
 	void DoIndex();
 
+
 private:
 	string filterFilename;
 	string dataFilename;
+	bool FileExists(const string& filename);
+	BinarySearchTree<Comparable> FileFilterReader(string filename);
+	//BinarySearchTree FileWordReader(string filename);
+	void OutputResults();
+
 
 };
 
