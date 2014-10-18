@@ -78,7 +78,7 @@ template <typename Comparable> BinarySearchTree<Comparable> Indexer::FileFilterR
 
 
 template <typename Comparable> BinarySearchTree<Comparable> Indexer::FileWordReader(string filename) {
-	cout << "Creating a BST of indexed words from " << filename << endl;
+	cout << "\n\nCreating a BST of indexed words from " << filename << endl;
 	ifstream dataFile;
 	dataFile.open(filename.c_str(), ios_base::in);
 
@@ -87,6 +87,17 @@ template <typename Comparable> BinarySearchTree<Comparable> Indexer::FileWordRea
 		cout << "...exiting" << endl;
 		exit(1);
 	}
+
+	string line;
+	int lineCount = 0;
+	while(!dataFile.eof())
+	{	
+		lineCount++;
+		cout << "Line " << lineCount << ":\n";
+		getline(dataFile, line);
+		cout << "\t" << line << endl;
+	}
+
 
 	dataFile.close();
 }
