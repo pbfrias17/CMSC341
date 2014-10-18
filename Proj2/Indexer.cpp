@@ -98,9 +98,33 @@ template <typename Comparable> BinarySearchTree<Comparable> Indexer::FileWordRea
 		lineCount++;
 		cout << "Line " << lineCount << ":\n";
 		getline(dataFile, line);
+		
+		
+		string fullWord;
+		bool endOfLine = false;
+		int index = 0;
+		while(!endOfLine) {
+			bool endOfWord = false;
+			while(!endOfWord) {
+				fullWord.append(1, line[index]);
+				index++;
+				if(line[index] == ' ' || line[index] == '\0') {
+					cout << "\tSPACE detected: word = " << fullWord << endl;
+					endOfWord = true;
+					fullWord.clear();
+				}
+			}
+			if(line[index] == '\0') {
+				cout << "\tNULL detected: finished parsing line\n";
+				endOfLine = true;
+				index = 0;
+			}
+		}
+		/*
 		int front = 0;
 		int last = 0;
 		int length = 0;
+		
 		
 		endOfLine = false;
 		while(!endOfLine) {
@@ -125,6 +149,7 @@ template <typename Comparable> BinarySearchTree<Comparable> Indexer::FileWordRea
 			cin >> stopper;
 
 		}
+		*/
 	}
 
 
