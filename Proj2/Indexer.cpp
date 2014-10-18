@@ -89,13 +89,42 @@ template <typename Comparable> BinarySearchTree<Comparable> Indexer::FileWordRea
 	}
 
 	string line;
+	string word;
+	bool endOfLine = false;
 	int lineCount = 0;
 	while(!dataFile.eof())
 	{	
+		//Must keep track of current line number
 		lineCount++;
 		cout << "Line " << lineCount << ":\n";
 		getline(dataFile, line);
-		cout << "\t" << line << endl;
+		int front = 0;
+		int last = 0;
+		int length = 0;
+		
+		endOfLine = false;
+		while(!endOfLine) {
+			while(line[last] != ' ' && !endOfLine) {
+	
+				if(line[last] == ' ')
+					cout << "\t\t| |";
+
+				cout << "\t\t" << line[last] << endl;
+				if(line[last] == '\0') {
+					cout << "\tEnd of Line " << lineCount << endl;
+					endOfLine = true;
+				}
+				last++;
+			}
+			length = last - front;
+			word = line.substr(front, length-1);
+			cout << "\t--" << word << endl;
+			front = last;
+
+			int stopper;
+			cin >> stopper;
+
+		}
 	}
 
 
