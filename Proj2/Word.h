@@ -9,13 +9,15 @@ public:
 	Word();
 	Word(string word);
 	int getCount() const;
-	string getWordString() const;
-	friend bool operator< (const Word &lhs, const Word &rhs);
-	friend bool operator> (const Word &lhs, const Word &rhs);
+	string getWordText() const;
+	friend bool operator<(const Word &lhs, const Word &rhs);
+	//friend bool operator>(const Word &lhs, const Word &rhs);
+	friend ostream& operator<<(ostream& os, const Word &rhs);
+
 private:
-	string wordString;
+	string wordText;
 	int count;
-	//queue<int> lineNumbers;
+	queue<int> lineNumbers;
 };
 
 #endif //WORD_H

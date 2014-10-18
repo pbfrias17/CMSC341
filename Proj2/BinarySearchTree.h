@@ -148,13 +148,14 @@ private:
      */
     void insert( const Comparable & x, BinaryNode * & t )
     {
-		cout << "\tInserting into filteredBST\n";
 		if (t == NULL)
-            t = new BinaryNode( x, NULL, NULL );
-        else if( x < t->element )
-            insert( x, t->left );
+			t = new BinaryNode(x, NULL, NULL);
+		else if (x < t->element)
+			insert( x, t->left );
+			//cout << x.getWordText() << " < " << t->element.getWordText() << endl;
         else if( t->element < x )
             insert( x, t->right );
+			//cout << x.getWordText() << " > " << t->element.getWordText() << endl;
         else
             ;  // Duplicate; do nothing
     }

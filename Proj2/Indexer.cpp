@@ -39,6 +39,7 @@ void Indexer::DoIndex() {
 
 
 	BinarySearchTree<Word> filteredBST = FileFilterReader<Word>(filterFilename);
+	filteredBST.printTree();
 
 
 	dataFile.close();
@@ -61,15 +62,14 @@ template <typename Comparable> BinarySearchTree<Comparable> Indexer::FileFilterR
 
 	BinarySearchTree<Word>* filteredBST = new BinarySearchTree<Word>();
 
-	string word;
-	while (filterFile >> word) {
-		cout << "Look at: " << word << endl;
+	string filterWord;
+	while (filterFile >> filterWord) {
+		cout << "Look at: " << filterWord << endl;
 		//convert string word into Word object
-		Word word = Word(word);
+		Word word = Word(filterWord);
 		filteredBST->insert(word);
 	}
-
 	filterFile.close();
 
-	return BinarySearchTree<Word>();
+	return *filteredBST;
 }
