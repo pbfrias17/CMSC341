@@ -22,6 +22,7 @@ private:
 	string dataFilename;
 	bool FileExists(const string& filename);
 	template <typename Comparable> BinarySearchTree<Comparable> FileFilterReader(string filename);
+	template <typename Comparable> BinarySearchTree<Comparable> FileWordReader(string filename);
 	//BinarySearchTree FileWordReader(string filename);
 	void OutputResults();
 

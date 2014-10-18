@@ -60,6 +60,7 @@ bool operator> (const Word &lhs, const Word &rhs) {
 */
 
 ostream& operator<<(ostream& os, const Word &rhs) {
+	//But this should also print out word count and line numbers!
 	os << rhs.getWordText() << endl;
 	return os;
 }

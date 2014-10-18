@@ -39,7 +39,8 @@ void Indexer::DoIndex() {
 
 
 	BinarySearchTree<Word> filteredBST = FileFilterReader<Word>(filterFilename);
-	filteredBST.printTree();
+	BinarySearchTree<Word> indexedBST = FileWordReader<Word>(dataFilename);
+	//filteredBST.printTree();
 
 
 	dataFile.close();
@@ -52,10 +53,10 @@ template <typename Comparable> BinarySearchTree<Comparable> Indexer::FileFilterR
 	cout << "Creating a BST of Filterwords from " << filename << endl;
 	ifstream filterFile;
 
-	filterFile.open(filterFilename.c_str(), ios_base::in);
+	filterFile.open(filename.c_str(), ios_base::in);
 
 	if (filterFile.fail()) {
-		cout << "Failed to open file: " << filterFilename << endl;
+		cout << "Failed to open file: " << filename << endl;
 		cout << "...exiting" << endl;
 		exit(1);
 	}
@@ -72,4 +73,20 @@ template <typename Comparable> BinarySearchTree<Comparable> Indexer::FileFilterR
 	filterFile.close();
 
 	return *filteredBST;
+}
+
+
+
+template <typename Comparable> BinarySearchTree<Comparable> Indexer::FileWordReader(string filename) {
+	cout << "Creating a BST of indexed words from " << filename << endl;
+	ifstream dataFile;
+	dataFile.open(filename.c_str(), ios_base::in);
+
+	if(dataFile.fail()) {
+		cout << "Failed to open file: " << filename << endl;
+		cout << "...exiting" << endl;
+		exit(1);
+	}
+
+	dataFile.close();
 }
