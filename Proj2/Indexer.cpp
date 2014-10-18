@@ -3,7 +3,8 @@
 #include "Word.h"
 
 Indexer::Indexer()
-: filterFilename("gsl.txt"), dataFilename("data.txt") {}
+: filterFilename("gsl.txt"), dataFilename("data.txt") {
+}
 
 Indexer::Indexer(string filter, string data) 
 : filterFilename(filter), dataFilename(data) {}
@@ -99,13 +100,13 @@ template <typename Comparable> BinarySearchTree<Comparable> Indexer::FileWordRea
 		cout << "Line " << lineCount << ":\n";
 		getline(dataFile, line);
 		
-		
 		string fullWord;
 		bool endOfLine = false;
 		int index = 0;
 		while(!endOfLine) {
 			bool endOfWord = false;
 			while(!endOfWord) {
+				//Check to see if character is not alphanumeric
 				fullWord.append(1, line[index]);
 				index++;
 				if(line[index] == ' ' || line[index] == '\0') {
@@ -120,36 +121,6 @@ template <typename Comparable> BinarySearchTree<Comparable> Indexer::FileWordRea
 				index = 0;
 			}
 		}
-		/*
-		int front = 0;
-		int last = 0;
-		int length = 0;
-		
-		
-		endOfLine = false;
-		while(!endOfLine) {
-			while(line[last] != ' ' && !endOfLine) {
-	
-				if(line[last] == ' ')
-					cout << "\t\t| |";
-
-				cout << "\t\t" << line[last] << endl;
-				if(line[last] == '\0') {
-					cout << "\tEnd of Line " << lineCount << endl;
-					endOfLine = true;
-				}
-				last++;
-			}
-			length = last - front;
-			word = line.substr(front, length-1);
-			cout << "\t--" << word << endl;
-			front = last;
-
-			int stopper;
-			cin >> stopper;
-
-		}
-		*/
 	}
 
 

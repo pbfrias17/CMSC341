@@ -20,11 +20,13 @@ public:
 private:
 	string filterFilename;
 	string dataFilename;
+	template <typename Comparable> BinarySearchTree<Comparable> filteredBST;
+	//template <typename Comparable> BinarySearchTree<Comparable> indexedBST;
 	bool FileExists(const string& filename);
+
 	template <typename Comparable> BinarySearchTree<Comparable> FileFilterReader(string filename);
 	template <typename Comparable> BinarySearchTree<Comparable> FileWordReader(string filename);
-	//BinarySearchTree FileWordReader(string filename);
-	void OutputResults();
+	void OutputResults() const;
 
 
 };

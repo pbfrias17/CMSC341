@@ -8,10 +8,12 @@ class Word {
 public:
 	Word();
 	Word(string word);
+	
+	void CountWord();
 	int getCount() const;
 	string getWordText() const;
 	friend bool operator<(const Word &lhs, const Word &rhs);
-	//friend bool operator>(const Word &lhs, const Word &rhs);
+	//friend bool operator==(const Word &lhs, const Word &rhs);
 	friend ostream& operator<<(ostream& os, const Word &rhs);
 
 private:
