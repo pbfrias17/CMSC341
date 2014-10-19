@@ -20,25 +20,8 @@ void Indexer::DoIndex() {
 	ifstream dataFile;
 	dataFile.open(dataFilename.c_str(), ios_base::in);
 	string word;
-	//infile.open(inputFile.c_str(), ios_base::in);
 
-	
-	/*
-	
-
-	if(dataFile.fail()) {
-		cout << "Failed to open file: " << dataFilename << endl;
-		cout << "...exiting" << endl;
-		cin >> stopper;
-		exit(1);
-	}
-
-	while(dataFile >> word) {
-		cout << word << endl;
-	}
-	*/
-
-
+	//These should be private members!
 	BinarySearchTree<Word> filteredBST = FileFilterReader<Word>(filterFilename);
 	BinarySearchTree<Word> indexedBST = FileWordReader<Word>(dataFilename);
 	//filteredBST.printTree();
@@ -95,31 +78,56 @@ template <typename Comparable> BinarySearchTree<Comparable> Indexer::FileWordRea
 	int lineCount = 0;
 	while(!dataFile.eof())
 	{	
-		//Must keep track of current line number
 		lineCount++;
 		cout << "Line " << lineCount << ":\n";
 		getline(dataFile, line);
-		
-		string fullWord;
 		bool endOfLine = false;
+		//Check to see if the line is blank
+		if (line.size() == 0)
+			endOfLine = true;
+
+		string fullWord;
 		int index = 0;
+		
 		while(!endOfLine) {
 			bool endOfWord = false;
 			while(!endOfWord) {
-				//Check to see if character is not alphanumeric
-				fullWord.append(1, line[index]);
-				index++;
+				char lowered = putchar(tolower(line[index]));
+				//fullWord.append(1, lowered);
+				//index++;
+				
 				if(line[index] == ' ' || line[index] == '\0') {
-					cout << "\tSPACE detected: word = " << fullWord << endl;
+					cout << "\n\tSPACE detected: \n\t\tunedited word = " << fullWord << " " << fullWord.size() << endl;
+					//97 - 122
+					int firstASCII = tolower(fullWord[0]);
+					int lastASCII = tolower(fullWord[fullWord.size()]);
+					if (firstASCII < 97 || firstASCII > 122)
+						fullWord.erase(0, 1);
+					if (lastASCII < 97 || lastASCII > 122) {
+						cout << "\n\n\nLAST CHAR IS NON ALPHANUM!\n\n\n";
+						//fullWord.erase(fullWord.size()-1, 1);
+					}
+
+					cout << "\n\t\t   edited word = " << fullWord << " " << fullWord.size() << endl;
 					endOfWord = true;
-					fullWord.clear();
+					if (line[index] == '\0') {
+						cout << "\tNULL detected: finished parsing line\n";
+						endOfLine = true;
+						index = 0;
+					}
+				} else {
+					fullWord.append(1, lowered);
+					//index++;
 				}
+				index++;
 			}
+			fullWord.clear();
+			/*
 			if(line[index] == '\0') {
 				cout << "\tNULL detected: finished parsing line\n";
 				endOfLine = true;
 				index = 0;
-			}
+			}*/
 		}
 	}
 

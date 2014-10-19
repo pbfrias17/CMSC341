@@ -20,7 +20,7 @@ public:
 private:
 	string filterFilename;
 	string dataFilename;
-	template <typename Comparable> BinarySearchTree<Comparable> filteredBST;
+	//template <typename Comparable> BinarySearchTree<Comparable> filteredBST;
 	//template <typename Comparable> BinarySearchTree<Comparable> indexedBST;
 	bool FileExists(const string& filename);
 
