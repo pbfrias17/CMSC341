@@ -25,98 +25,98 @@ template <typename Comparable>
 class BinarySearchTree
 {
 public:
-    BinarySearchTree( )
-	:root( NULL ) {}
+	BinarySearchTree()
+		:root(NULL) {}
 
-    BinarySearchTree( const BinarySearchTree & rhs )
-	: root( NULL ) {
-        *this = rhs;
-    }
-
-    /**
-     * Destructor for the tree
-     */
-    ~BinarySearchTree( ) {
-        makeEmpty( );
-    }
-
-    /**
-     * Find the smallest item in the tree.
-     * Throw UnderflowException if empty.
-     */
-    const Comparable & findMin( ) const {
-        if( isEmpty( ) )
-            throw UnderflowException( );
-        return findMin( root )->element;
-    }
-
-    /**
-     * Find the largest item in the tree.
-     * Throw UnderflowException if empty.
-     */
-    const Comparable & findMax( ) const {
-        if( isEmpty( ) )
-            throw UnderflowException( );
-        return findMax( root )->element;
-    }
-
-    /**
-     * Returns true if x is found in the tree.
-     */
-    bool contains( const Comparable & x ) const {
-        return contains( x, root );
-    }
-
-    /**
-     * Test if the tree is logically empty.
-     * Return true if empty, false otherwise.
-     */
-    bool isEmpty( ) const {
-        return root == NULL;
-    }
-
-    /**
-     * Print the tree contents in sorted order.
-     */
-    void printTree( ostream & out = cout ) const {
-        if( isEmpty( ) )
-            out << "Empty tree" << endl;
-        else
-            printTree( root, out );
-    }
-
-    /**
-     * Make the tree logically empty.
-     */
-    void makeEmpty( ) {
-        makeEmpty( root );
-    }
-
-    /**
-     * Insert x into the tree; duplicates are ignored.
-     */
-    void insert( const Comparable & x ) {
-        insert( x, root );
+	BinarySearchTree(const BinarySearchTree & rhs)
+		: root(NULL) {
+		*this = rhs;
 	}
 
-    /**
-     * Remove x from the tree. Nothing is done if x is not found.
-     */
-    void remove( const Comparable & x ) {
-        remove( x, root );
-    }
+	/**
+	 * Destructor for the tree
+	 */
+	~BinarySearchTree() {
+		makeEmpty();
+	}
 
-    /**
-     * Deep copy.
-     */
-    const BinarySearchTree & operator=( const BinarySearchTree & rhs ) {
-        if( this != &rhs )
-        {
-            makeEmpty( );
-            root = clone( rhs.root );
-        }
-        return *this;
-    }
+	/**
+	 * Find the smallest item in the tree.
+	 * Throw UnderflowException if empty.
+	 */
+	const Comparable & findMin() const {
+		if (isEmpty())
+			throw UnderflowException();
+		return findMin(root)->element;
+	}
+
+	/**
+	 * Find the largest item in the tree.
+	 * Throw UnderflowException if empty.
+	 */
+	const Comparable & findMax() const {
+		if (isEmpty())
+			throw UnderflowException();
+		return findMax(root)->element;
+	}
+
+	/**
+	 * Returns true if x is found in the tree.
+	 */
+	bool contains(const Comparable & x) const {
+		return contains(x, root);
+	}
+
+	/**
+	 * Test if the tree is logically empty.
+	 * Return true if empty, false otherwise.
+	 */
+	bool isEmpty() const {
+		return root == NULL;
+	}
+
+	/**
+	 * Print the tree contents in sorted order.
+	 */
+	void printTree(ostream & out = cout) const {
+		if (isEmpty())
+			out << "Empty tree" << endl;
+		else
+			printTree(root, out);
+	}
+
+	/**
+	 * Make the tree logically empty.
+	 */
+	void makeEmpty() {
+		makeEmpty(root);
+	}
+
+	/**
+	 * Insert x into the tree; duplicates are ignored.
+	 */
+	void insert(const Comparable & x) {
+		insert(x, root);
+	}
+
+	/**
+	 * Remove x from the tree. Nothing is done if x is not found.
+	 */
+	void remove(const Comparable & x) {
+		remove(x, root);
+	}
+
+	/**
+	 * Deep copy.
+	 */
+	const BinarySearchTree & operator=(const BinarySearchTree & rhs) {
+		if (this != &rhs)
+		{
+			makeEmpty();
+			root = clone(rhs.root);
+		}
+		return *this;
+	}
 
 
 
@@ -127,38 +127,40 @@ public:
 
 
 private:
-    struct BinaryNode {
-        Comparable element;
-        BinaryNode *left;
-        BinaryNode *right;
+	struct BinaryNode {
+		Comparable element;
+		BinaryNode *left;
+		BinaryNode *right;
 
-        BinaryNode( const Comparable & theElement, BinaryNode *lt, BinaryNode 
-*rt )
-            : element( theElement ), left( lt ), right( rt ) { }
-    };
+		BinaryNode(const Comparable & theElement, BinaryNode *lt, BinaryNode
+			*rt)
+			: element(theElement), left(lt), right(rt) { }
+	};
 
-    BinaryNode *root;
+	BinaryNode *root;
 
 
-    /**
-     * Internal method to insert into a subtree.
-     * x is the item to insert.
-     * t is the node that roots the subtree.
-     * Set the new root of the subtree.
-     */
-    void insert( const Comparable & x, BinaryNode * & t )
-    {
-		if (t == NULL)
+	/**
+	 * Internal method to insert into a subtree.
+	 * x is the item to insert.
+	 * t is the node that roots the subtree.
+	 * Set the new root of the subtree.
+	 */
+	void insert(const Comparable & x, BinaryNode * & t)
+	{
+		if (t == NULL) {
 			t = new BinaryNode(x, NULL, NULL);
-		else if (x < t->element)
-			insert( x, t->left );
+			t->element.CountWord();
+		} else if (x < t->element) {
+			insert(x, t->left);
 			//cout << x.getWordText() << " < " << t->element.getWordText() << endl;
-        else if( t->element < x )
-            insert( x, t->right );
-			//cout << x.getWordText() << " > " << t->element.getWordText() << endl;
-        else
-            ;  // Duplicate; do nothing
-    }
+		} else if (t->element < x) {
+			insert(x, t->right);
+		//cout << x.getWordText() << " > " << t->element.getWordText() << endl;
+		} else {
+		 t->element.CountWord();
+		}
+	}
 
     /**
      * Internal method to remove from a subtree.

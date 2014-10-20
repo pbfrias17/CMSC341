@@ -9,9 +9,11 @@ public:
 	Word();
 	Word(string word);
 	
-	void CountWord();
-	int getCount() const;
 	string getWordText() const;
+	int getCount() const;
+	void setCurrLineNum(const int &lineNum);
+	queue<int> getLineNumbers() const;
+	void CountWord();
 	friend bool operator<(const Word &lhs, const Word &rhs);
 	//friend bool operator==(const Word &lhs, const Word &rhs);
 	friend ostream& operator<<(ostream& os, const Word &rhs);
@@ -19,6 +21,7 @@ public:
 private:
 	string wordText;
 	int count;
+	int currLineNum;
 	queue<int> lineNumbers;
 };
 

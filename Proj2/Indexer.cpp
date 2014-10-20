@@ -63,13 +63,13 @@ template <typename Comparable> BinarySearchTree<Comparable> Indexer::FileFilterR
 
 
 template <typename Comparable> BinarySearchTree<Comparable> Indexer::FileWordReader(string filename) {
-	cout << "\n\nCreating a BST of indexed words from " << filename << endl;
+	//cout << "\n\nCreating a BST of indexed words from " << filename << endl;
 	ifstream dataFile;
 	dataFile.open(filename.c_str(), ios_base::in);
 
 	if(dataFile.fail()) {
-		cout << "Failed to open file: " << filename << endl;
-		cout << "...exiting" << endl;
+		//cout << "Failed to open file: " << filename << endl;
+		//cout << "...exiting" << endl;
 		exit(1);
 	}
 
@@ -86,8 +86,10 @@ template <typename Comparable> BinarySearchTree<Comparable> Indexer::FileWordRea
 		bool endOfLine = false;
 
 		//Check to see if the line is blank
-		if (line.size() == 0)
+		if (line.size() == 0) {
+			//cout << "\nLINE IS EMPTY\n";
 			endOfLine = true;
+		}
 
 		string fullWord;
 		int index = 0;
@@ -95,25 +97,32 @@ template <typename Comparable> BinarySearchTree<Comparable> Indexer::FileWordRea
 		while(!endOfLine) {
 			bool endOfWord = false;
 			while(!endOfWord) {
-				char lowered = putchar(tolower(line[index]));
-				
+				//cout << index << ": \t";
+				char lowered = (char)tolower(line[index]);
+				//cout << "lowered = " << lowered << endl;
 				if(line[index] == ' ' || line[index] == '\0') {
 					int firstASCII = tolower(fullWord[0]);
 					int lastASCII = tolower(fullWord[fullWord.size() - 1]);
+					
 					if (firstASCII < 97 || firstASCII > 122)
 						fullWord.erase(0, 1);
 					if (lastASCII < 97 || lastASCII > 122) {
+						//cout << "last char no no\n";
 						fullWord = fullWord.substr(0, fullWord.size() - 1);
 					}
-					indexedBST->insert(fullWord);
+
+					Word word = Word(fullWord);
+					word.setCurrLineNum(lineCount);
+					indexedBST->insert(word);
 					endOfWord = true;
 					if (line[index] == '\0') {
+						//cout << "\nLINE ENDED\n";
 						endOfLine = true;
 						index = 0;
 					}
 				} else {
 					fullWord.append(1, lowered);
-					cout << "\tAppended " << lowered << " to " << fullWord << endl;
+					//cout << "\tAppended " << lowered << " to " << fullWord << endl;
 				}
 				index++;
 			}

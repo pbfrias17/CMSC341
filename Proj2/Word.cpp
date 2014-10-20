@@ -10,12 +10,25 @@ Word::Word()
 Word::Word(string word)
 	: wordText(word), count(0)  {}
 
+string Word::getWordText() const{
+	return wordText;
+}
+
 int Word::getCount() const{
 	return count;
 }
 
-string Word::getWordText() const{
-	return wordText;
+queue<int> Word::getLineNumbers() const {
+	return lineNumbers;
+}
+
+void Word::CountWord() {
+	lineNumbers.push(currLineNum);
+	count++;
+}
+
+void Word::setCurrLineNum(const int &lineNum){
+	currLineNum = lineNum;
 }
 
 
@@ -61,6 +74,13 @@ bool operator> (const Word &lhs, const Word &rhs) {
 
 ostream& operator<<(ostream& os, const Word &rhs) {
 	//But this should also print out word count and line numbers!
-	os << rhs.getWordText() << endl;
+	queue<int> lines = rhs.getLineNumbers(); 
+	os << rhs.getWordText() << "..." << rhs.getCount() << ": ";
+	os << "Size of list = " << lines.size() << endl;
+	for (int i = 0; i <= lines.size(); i++) {
+		os << lines.front() << " ";
+		lines.pop();
+	}
+	os << "\n";
 	return os;
 }
