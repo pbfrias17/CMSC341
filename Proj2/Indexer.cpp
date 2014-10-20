@@ -23,8 +23,9 @@ void Indexer::DoIndex() {
 
 	//These should be private members!
 	BinarySearchTree<Word> filteredBST = FileFilterReader<Word>(filterFilename);
+	filteredBST.printTree();
 	BinarySearchTree<Word> indexedBST = FileWordReader<Word>(dataFilename);
-	//filteredBST.printTree();
+	indexedBST.printTree();
 
 
 	dataFile.close();
@@ -45,11 +46,11 @@ template <typename Comparable> BinarySearchTree<Comparable> Indexer::FileFilterR
 		exit(1);
 	}
 
+	//This should be a member
 	BinarySearchTree<Word>* filteredBST = new BinarySearchTree<Word>();
 
 	string filterWord;
 	while (filterFile >> filterWord) {
-		cout << "Look at: " << filterWord << endl;
 		//convert string word into Word object
 		Word word = Word(filterWord);
 		filteredBST->insert(word);
@@ -72,16 +73,18 @@ template <typename Comparable> BinarySearchTree<Comparable> Indexer::FileWordRea
 		exit(1);
 	}
 
+	//This should be a member
+	BinarySearchTree<Word>* indexedBST = new BinarySearchTree<Word>();
+
 	string line;
-	string word;
 	bool endOfLine = false;
 	int lineCount = 0;
 	while(!dataFile.eof())
 	{	
 		lineCount++;
-		cout << "Line " << lineCount << ":\n";
 		getline(dataFile, line);
 		bool endOfLine = false;
+
 		//Check to see if the line is blank
 		if (line.size() == 0)
 			endOfLine = true;
@@ -93,44 +96,32 @@ template <typename Comparable> BinarySearchTree<Comparable> Indexer::FileWordRea
 			bool endOfWord = false;
 			while(!endOfWord) {
 				char lowered = putchar(tolower(line[index]));
-				//fullWord.append(1, lowered);
-				//index++;
 				
 				if(line[index] == ' ' || line[index] == '\0') {
-					cout << "\n\tSPACE detected: \n\t\tunedited word = " << fullWord << " " << fullWord.size() << endl;
-					//97 - 122
 					int firstASCII = tolower(fullWord[0]);
-					int lastASCII = tolower(fullWord[fullWord.size()]);
+					int lastASCII = tolower(fullWord[fullWord.size() - 1]);
 					if (firstASCII < 97 || firstASCII > 122)
 						fullWord.erase(0, 1);
-					if (lastASCII < 97 || lastASCII > 122)
-						//for some reason, could not get
-						// fullWord.erase(fullWord.size(), 1) to work
-						fullWord = fullWord.substr(0, fullWord.size()-1);
-
-					cout << "\n\t\t   edited word = " << fullWord << " " << fullWord.size() << endl;
+					if (lastASCII < 97 || lastASCII > 122) {
+						fullWord = fullWord.substr(0, fullWord.size() - 1);
+					}
+					indexedBST->insert(fullWord);
 					endOfWord = true;
 					if (line[index] == '\0') {
-						cout << "\tNULL detected: finished parsing line\n";
 						endOfLine = true;
 						index = 0;
 					}
 				} else {
 					fullWord.append(1, lowered);
-					//index++;
+					cout << "\tAppended " << lowered << " to " << fullWord << endl;
 				}
 				index++;
 			}
 			fullWord.clear();
-			/*
-			if(line[index] == '\0') {
-				cout << "\tNULL detected: finished parsing line\n";
-				endOfLine = true;
-				index = 0;
-			}*/
 		}
 	}
-
-
 	dataFile.close();
+
+	return *indexedBST;
+
 }
