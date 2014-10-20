@@ -103,10 +103,10 @@ template <typename Comparable> BinarySearchTree<Comparable> Indexer::FileWordRea
 					int lastASCII = tolower(fullWord[fullWord.size()]);
 					if (firstASCII < 97 || firstASCII > 122)
 						fullWord.erase(0, 1);
-					if (lastASCII < 97 || lastASCII > 122) {
-						cout << "\n\n\nLAST CHAR IS NON ALPHANUM!\n\n\n";
-						//fullWord.erase(fullWord.size()-1, 1);
-					}
+					if (lastASCII < 97 || lastASCII > 122)
+						//for some reason, could not get
+						// fullWord.erase(fullWord.size(), 1) to work
+						fullWord = fullWord.substr(0, fullWord.size()-1);
 
 					cout << "\n\t\t   edited word = " << fullWord << " " << fullWord.size() << endl;
 					endOfWord = true;
