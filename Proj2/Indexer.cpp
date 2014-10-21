@@ -104,11 +104,16 @@ template <typename Comparable> BinarySearchTree<Comparable> Indexer::FileWordRea
 					}
 
 					//check to see if word should be filtered out
-					
 					Word word = Word(fullWord);
-					word.setCurrLineNum(lineCount);
-					indexedBST->insert(word);
+					if (!filteredBST->contains(word)) {
+						word.setCurrLineNum(lineCount);
+						indexedBST->insert(word);
+					} else {
+						cout << "Filtering out '" << word << "' from datafile\n";
+					}
+
 					endOfWord = true;
+
 					if (line[index] == '\0') {
 						//cout << "\nLINE ENDED\n";
 						endOfLine = true;
