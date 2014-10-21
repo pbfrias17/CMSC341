@@ -16,7 +16,6 @@ public:
 	queue<int> getLineNumbers() const;
 	void CountWord();
 	friend bool operator<(const Word &lhs, const Word &rhs);
-	//friend bool operator==(const Word &lhs, const Word &rhs);
 	friend ostream& operator<<(ostream& os, const Word &rhs);
 
 private:

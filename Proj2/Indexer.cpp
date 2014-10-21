@@ -18,23 +18,16 @@ void Indexer::DoIndex() {
 	//////
 	int stopper;
 	////////
-	cout << "Filter file: " << filterFilename << endl;
-	cout << "Data file: " << dataFilename << endl;
 
-	//This should all be in filterFileReader methods
-	ifstream dataFile;
-	dataFile.open(dataFilename.c_str(), ios_base::in);
-	string word;
+	*filteredBST = FileFilterReader<Word>(filterFilename);
+	filteredBST->printTree();
+	*indexedBST = FileWordReader<Word>(dataFilename);
+	indexedBST->printTree();
 
-	//These should be private members!
-	BinarySearchTree<Word> filteredBST = FileFilterReader<Word>(filterFilename);
-	//filteredBST.printTree();
-	BinarySearchTree<Word> indexedBST = FileWordReader<Word>(dataFilename);
-	indexedBST.printTree();
-
-
-	dataFile.close();
-
+	delete filteredBST;
+	filteredBST = NULL;
+	delete indexedBST;
+	indexedBST = NULL;
 	cin >> stopper;
 }
 
