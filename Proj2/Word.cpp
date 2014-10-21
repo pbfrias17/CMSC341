@@ -23,7 +23,12 @@ queue<int> Word::getLineNumbers() const {
 }
 
 void Word::CountWord() {
-	lineNumbers.push(currLineNum);
+	//don't duplicate line numbers
+	if (lineNumbers.size() == 0)
+		lineNumbers.push(currLineNum);
+	else if (lineNumbers.back() != currLineNum)
+		lineNumbers.push(currLineNum);
+	
 	count++;
 }
 
@@ -51,8 +56,15 @@ bool operator< (const Word &lhs, const Word &rhs) {
 
 ostream& operator<<(ostream& os, const Word &rhs) {
 	//But this should also print out word count and line numbers!
-	queue<int> lines = rhs.getLineNumbers(); 
-	os << rhs.getWordText() << "..." << rhs.getCount() << ": ";
+	queue<int> lines = rhs.getLineNumbers();
+	//|25 characters| list of numbers
+	os << rhs.getWordText(); 
+	for (int i = 1; i <= 22 - rhs.getWordText().size(); i++) {
+		os << ".";
+	}
+	if (rhs.getCount() < 10)
+		os << ".";
+	os << ": ";
 
 	while (!lines.empty()) {
 		os << lines.front() << " ";

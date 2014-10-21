@@ -22,8 +22,9 @@ void Indexer::DoIndex() {
 
 	if (FileExists(filterFilename) && FileExists(dataFilename)) {
 		*filteredBST = FileFilterReader<Word>(filterFilename);
-		filteredBST->printTree();
+		//filteredBST->printTree();
 		*indexedBST = FileWordReader<Word>(dataFilename);
+		cout << "Done inserting... now printing\n";
 		indexedBST->printTree();
 	} else {
 		cout << "Problem with the given files.\nExiting...";
@@ -54,21 +55,21 @@ bool Indexer::FileExists(const string &filename) {
 void Indexer::RemovePunctuation(string &word) {
 	int firstASCII = tolower(word[0]);
 	while (firstASCII < 97 || firstASCII > 122) {
-		cout << "Take out " << (char)firstASCII << endl;
+		//cout << "Take out " << (char)firstASCII << endl;
 		word.erase(0, 1);
 		firstASCII = tolower(word[0]);
 	}
 
 	int lastASCII = tolower(word[word.size() - 1]);
 	while (lastASCII < 97 || lastASCII > 122) {
-		cout << (char)lastASCII << endl;
+		//cout << (char)lastASCII << endl;
 		word = word.substr(0, word.size() - 1);
 		lastASCII = tolower(word[word.size() - 1]);
 	}
 }
 
 template <typename Comparable> BinarySearchTree<Comparable> Indexer::FileFilterReader(string filename) {
-	cout << "Creating a BST of Filterwords from " << filename << endl;
+	//cout << "Creating a BST of Filterwords from " << filename << endl;
 	ifstream filterFile;
 
 	filterFile.open(filename.c_str(), ios_base::in);
@@ -87,7 +88,7 @@ template <typename Comparable> BinarySearchTree<Comparable> Indexer::FileFilterR
 
 
 template <typename Comparable> BinarySearchTree<Comparable> Indexer::FileWordReader(string filename) {
-	cout << "\n\nCreating a BST of indexed words from " << filename << endl;
+	//cout << "\n\nCreating a BST of indexed words from " << filename << endl;
 	ifstream dataFile;
 	dataFile.open(filename.c_str(), ios_base::in);
 
@@ -102,35 +103,36 @@ template <typename Comparable> BinarySearchTree<Comparable> Indexer::FileWordRea
 
 		//Check to see if the line is blank
 		if (line.size() == 0) {
-			cout << "\nLINE IS EMPTY\n";
+			//cout << "\nLINE IS EMPTY\n";
 			endOfLine = true;
 		}
 
 		string fullWord;
 		int index = 0;
-		cout << "1\n";
+		//cout << "1\n";
 		while(!endOfLine) {
-			cout << "2\n";
+			//cout << "2\n";
 			bool endOfWord = false;
 			while(!endOfWord) {
 				//cout << index << ": \t";
 				char lowered = (char)tolower(line[index]);
-				cout << "| " << lowered << " |" << endl;
+				//cout << "| " << lowered << " |" << endl;
 				if(line[index] == ' ' || line[index] == '\0') {
-					cout << "SPACE OR EOL\n";
-					cout << "Full Word: " << fullWord << "|" << endl;
-					
-					RemovePunctuation(fullWord);
+				//	cout << "SPACE OR EOL\n";
+					//cout << "Full Word: " << fullWord << "|" << endl;
+					if (fullWord.size() > 1)
+						RemovePunctuation(fullWord);
 
-					cout << "Punctuation is fine\n";
+				//	cout << "Punctuation is fine\n";
 
 					//check to see if word should be filtered out
 					Word word = Word(fullWord);
-					if (!filteredBST->contains(word)) {
+					if (!filteredBST->contains(word) && fullWord.size() > 1) {
+						cout << fullWord << endl;
 						word.setCurrLineNum(lineCount);
 						indexedBST->insert(word);
 					} else {
-						cout << "Filtering out '" << word << "' from datafile\n";
+						//cout << "Filtering out '" << word << "' from datafile\n";
 					}
 
 					endOfWord = true;
