@@ -19,10 +19,16 @@ void Indexer::DoIndex() {
 	int stopper;
 	////////
 
-	*filteredBST = FileFilterReader<Word>(filterFilename);
-	filteredBST->printTree();
-	*indexedBST = FileWordReader<Word>(dataFilename);
-	indexedBST->printTree();
+
+	if (FileExists(filterFilename) && FileExists(dataFilename)) {
+		*filteredBST = FileFilterReader<Word>(filterFilename);
+		filteredBST->printTree();
+		*indexedBST = FileWordReader<Word>(dataFilename);
+		indexedBST->printTree();
+	} else {
+		cout << "Problem with the given files.\nExiting...";
+		exit(1);
+	}
 
 	delete filteredBST;
 	filteredBST = NULL;
@@ -31,6 +37,35 @@ void Indexer::DoIndex() {
 	cin >> stopper;
 }
 
+bool Indexer::FileExists(const string &filename) {
+	ifstream dataFile;
+	dataFile.open(filename.c_str(), ios_base::in);
+
+	if (dataFile.fail()) {
+		cout << "Failed to open file: " << filename << endl;
+		cout << "...exiting" << endl;
+		return false;
+	}
+
+	dataFile.close();
+	return true;
+}
+
+void Indexer::RemovePunctuation(string &word) {
+	int firstASCII = tolower(word[0]);
+	while (firstASCII < 97 || firstASCII > 122) {
+		cout << "Take out " << (char)firstASCII << endl;
+		word.erase(0, 1);
+		firstASCII = tolower(word[0]);
+	}
+
+	int lastASCII = tolower(word[word.size() - 1]);
+	while (lastASCII < 97 || lastASCII > 122) {
+		cout << (char)lastASCII << endl;
+		word = word.substr(0, word.size() - 1);
+		lastASCII = tolower(word[word.size() - 1]);
+	}
+}
 
 template <typename Comparable> BinarySearchTree<Comparable> Indexer::FileFilterReader(string filename) {
 	cout << "Creating a BST of Filterwords from " << filename << endl;
@@ -38,35 +73,23 @@ template <typename Comparable> BinarySearchTree<Comparable> Indexer::FileFilterR
 
 	filterFile.open(filename.c_str(), ios_base::in);
 
-	//This should be a member
-	//BinarySearchTree<Word>* filteredBST = new BinarySearchTree<Word>();
-
 	string filterWord;
 	while (filterFile >> filterWord) {
 		//convert string word into Word object
 		Word word = Word(filterWord);
 		filteredBST->insert(word);
 	}
-	filterFile.close();
 
+	filterFile.close();
 	return *filteredBST;
 }
 
 
 
 template <typename Comparable> BinarySearchTree<Comparable> Indexer::FileWordReader(string filename) {
-	//cout << "\n\nCreating a BST of indexed words from " << filename << endl;
+	cout << "\n\nCreating a BST of indexed words from " << filename << endl;
 	ifstream dataFile;
 	dataFile.open(filename.c_str(), ios_base::in);
-
-	if(dataFile.fail()) {
-		//cout << "Failed to open file: " << filename << endl;
-		//cout << "...exiting" << endl;
-		exit(1);
-	}
-
-	//This should be a member
-	//BinarySearchTree<Word>* indexedBST = new BinarySearchTree<Word>();
 
 	string line;
 	bool endOfLine = false;
@@ -79,29 +102,27 @@ template <typename Comparable> BinarySearchTree<Comparable> Indexer::FileWordRea
 
 		//Check to see if the line is blank
 		if (line.size() == 0) {
-			//cout << "\nLINE IS EMPTY\n";
+			cout << "\nLINE IS EMPTY\n";
 			endOfLine = true;
 		}
 
 		string fullWord;
 		int index = 0;
-		
+		cout << "1\n";
 		while(!endOfLine) {
+			cout << "2\n";
 			bool endOfWord = false;
 			while(!endOfWord) {
 				//cout << index << ": \t";
 				char lowered = (char)tolower(line[index]);
-				//cout << "lowered = " << lowered << endl;
+				cout << "| " << lowered << " |" << endl;
 				if(line[index] == ' ' || line[index] == '\0') {
-					int firstASCII = tolower(fullWord[0]);
-					int lastASCII = tolower(fullWord[fullWord.size() - 1]);
+					cout << "SPACE OR EOL\n";
+					cout << "Full Word: " << fullWord << "|" << endl;
 					
-					if (firstASCII < 97 || firstASCII > 122)
-						fullWord.erase(0, 1);
-					if (lastASCII < 97 || lastASCII > 122) {
-						//cout << "last char no no\n";
-						fullWord = fullWord.substr(0, fullWord.size() - 1);
-					}
+					RemovePunctuation(fullWord);
+
+					cout << "Punctuation is fine\n";
 
 					//check to see if word should be filtered out
 					Word word = Word(fullWord);

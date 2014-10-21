@@ -23,8 +23,10 @@ private:
 	string dataFilename;
 	BinarySearchTree<Word> *filteredBST;
 	BinarySearchTree<Word> *indexedBST;
-	bool FileExists(const string& filename);
 
+
+	bool FileExists(const string& filename);
+	void RemovePunctuation(string &word);
 	template <typename Comparable> BinarySearchTree<Comparable> FileFilterReader(string filename);
 	template <typename Comparable> BinarySearchTree<Comparable> FileWordReader(string filename);
 	void OutputResults() const;
