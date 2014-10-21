@@ -150,6 +150,7 @@ private:
 	{
 		if (t == NULL) {
 			t = new BinaryNode(x, NULL, NULL);
+			//t->element.setCurrLineNum(x.getCurrLineNum());
 			t->element.CountWord();
 		} else if (x < t->element) {
 			insert(x, t->left);
@@ -158,6 +159,7 @@ private:
 			insert(x, t->right);
 		//cout << x.getWordText() << " > " << t->element.getWordText() << endl;
 		} else {
+		 t->element.setCurrLineNum(x.getCurrLineNum());
 		 t->element.CountWord();
 		}
 	}

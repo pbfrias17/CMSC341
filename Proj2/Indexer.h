@@ -7,6 +7,7 @@
 #include <cstdlib>
 
 #include "BinarySearchTree.h"
+#include "Word.h"
 
 using namespace std;
 
@@ -20,8 +21,8 @@ public:
 private:
 	string filterFilename;
 	string dataFilename;
-	//template <typename Comparable> BinarySearchTree<Comparable> filteredBST;
-	//template <typename Comparable> BinarySearchTree<Comparable> indexedBST;
+	BinarySearchTree<Word> *filteredBST;
+	BinarySearchTree<Word> *indexedBST;
 	bool FileExists(const string& filename);
 
 	template <typename Comparable> BinarySearchTree<Comparable> FileFilterReader(string filename);

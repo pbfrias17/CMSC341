@@ -12,6 +12,7 @@ public:
 	string getWordText() const;
 	int getCount() const;
 	void setCurrLineNum(const int &lineNum);
+	int getCurrLineNum() const;
 	queue<int> getLineNumbers() const;
 	void CountWord();
 	friend bool operator<(const Word &lhs, const Word &rhs);

@@ -4,10 +4,15 @@
 
 Indexer::Indexer()
 : filterFilename("gsl.txt"), dataFilename("data.txt") {
+	filteredBST = new BinarySearchTree<Word>();
+	indexedBST = new BinarySearchTree<Word>();
 }
 
 Indexer::Indexer(string filter, string data) 
-: filterFilename(filter), dataFilename(data) {}
+: filterFilename(filter), dataFilename(data) {
+	filteredBST = new BinarySearchTree<Word>();
+	indexedBST = new BinarySearchTree<Word>();
+}
 
 void Indexer::DoIndex() {
 	//////
@@ -23,7 +28,7 @@ void Indexer::DoIndex() {
 
 	//These should be private members!
 	BinarySearchTree<Word> filteredBST = FileFilterReader<Word>(filterFilename);
-	filteredBST.printTree();
+	//filteredBST.printTree();
 	BinarySearchTree<Word> indexedBST = FileWordReader<Word>(dataFilename);
 	indexedBST.printTree();
 
@@ -40,14 +45,8 @@ template <typename Comparable> BinarySearchTree<Comparable> Indexer::FileFilterR
 
 	filterFile.open(filename.c_str(), ios_base::in);
 
-	if (filterFile.fail()) {
-		cout << "Failed to open file: " << filename << endl;
-		cout << "...exiting" << endl;
-		exit(1);
-	}
-
 	//This should be a member
-	BinarySearchTree<Word>* filteredBST = new BinarySearchTree<Word>();
+	//BinarySearchTree<Word>* filteredBST = new BinarySearchTree<Word>();
 
 	string filterWord;
 	while (filterFile >> filterWord) {
@@ -74,7 +73,7 @@ template <typename Comparable> BinarySearchTree<Comparable> Indexer::FileWordRea
 	}
 
 	//This should be a member
-	BinarySearchTree<Word>* indexedBST = new BinarySearchTree<Word>();
+	//BinarySearchTree<Word>* indexedBST = new BinarySearchTree<Word>();
 
 	string line;
 	bool endOfLine = false;
@@ -111,6 +110,8 @@ template <typename Comparable> BinarySearchTree<Comparable> Indexer::FileWordRea
 						fullWord = fullWord.substr(0, fullWord.size() - 1);
 					}
 
+					//check to see if word should be filtered out
+					
 					Word word = Word(fullWord);
 					word.setCurrLineNum(lineCount);
 					indexedBST->insert(word);

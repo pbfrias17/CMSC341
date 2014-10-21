@@ -31,6 +31,10 @@ void Word::setCurrLineNum(const int &lineNum){
 	currLineNum = lineNum;
 }
 
+int Word::getCurrLineNum() const{
+	return currLineNum;
+}
+
 
 //Operation Overloading
 bool operator< (const Word &lhs, const Word &rhs) {
@@ -76,8 +80,9 @@ ostream& operator<<(ostream& os, const Word &rhs) {
 	//But this should also print out word count and line numbers!
 	queue<int> lines = rhs.getLineNumbers(); 
 	os << rhs.getWordText() << "..." << rhs.getCount() << ": ";
-	os << "Size of list = " << lines.size() << endl;
-	for (int i = 0; i <= lines.size(); i++) {
+	//os << "Size of list = " << lines.size() << endl;
+	//os << lines.front() << " " << lines.back();
+	while (!lines.empty()) {
 		os << lines.front() << " ";
 		lines.pop();
 	}
