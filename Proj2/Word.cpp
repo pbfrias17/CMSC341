@@ -10,6 +10,14 @@ Word::Word()
 Word::Word(string word)
 	: wordText(word), count(0)  {}
 
+void Word::setType(const string& type) {
+	wordType = type;
+}
+
+string Word::getType() const {
+	return wordType;
+}
+
 string Word::getWordText() const{
 	return wordText;
 }
@@ -55,20 +63,27 @@ bool operator< (const Word &lhs, const Word &rhs) {
 }
 
 ostream& operator<<(ostream& os, const Word &rhs) {
-	//But this should also print out word count and line numbers!
-	queue<int> lines = rhs.getLineNumbers();
-	//|25 characters| list of numbers
-	os << rhs.getWordText(); 
-	for (int i = 1; i <= 22 - rhs.getWordText().size(); i++) {
-		os << ".";
-	}
-	if (rhs.getCount() < 10)
-		os << ".";
-	os << ": ";
+	//Each tree needs different printing layouts
+	if (rhs.getType() == "indexed") {
+		//But this should also print out word count and line numbers!
+		queue<int> lines = rhs.getLineNumbers();
+		//layout must be right-justified
+		os << rhs.getWordText();
+		for (int i = 1; i <= 22 - rhs.getWordText().size(); i++) {
+			os << ".";
+		}
+		
+		if (rhs.getCount() < 10)
+			os << ".";
+		
+		os << rhs.getCount() << ": ";
 
-	while (!lines.empty()) {
-		os << lines.front() << " ";
-		lines.pop();
+		while (!lines.empty()) {
+			os << lines.front() << " ";
+			lines.pop();
+		}
+	} else {
+		os << rhs.getWordText();
 	}
 	os << "\n";
 	return os;

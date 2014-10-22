@@ -9,6 +9,8 @@ public:
 	Word();
 	Word(string word);
 	
+	void setType(const string &type);
+	string getType() const;
 	string getWordText() const;
 	int getCount() const;
 	void setCurrLineNum(const int &lineNum);
@@ -19,6 +21,7 @@ public:
 	friend ostream& operator<<(ostream& os, const Word &rhs);
 
 private:
+	string wordType;
 	string wordText;
 	int count;
 	int currLineNum;

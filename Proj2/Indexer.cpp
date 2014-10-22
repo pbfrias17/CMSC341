@@ -22,9 +22,9 @@ void Indexer::DoIndex() {
 
 	if (FileExists(filterFilename) && FileExists(dataFilename)) {
 		*filteredBST = FileFilterReader<Word>(filterFilename);
-		//filteredBST->printTree();
+		filteredBST->printTree();
 		*indexedBST = FileWordReader<Word>(dataFilename);
-		cout << "Done inserting... now printing\n";
+		//cout << "Done inserting... now printing\n";
 		indexedBST->printTree();
 	} else {
 		cout << "Problem with the given files.\nExiting...";
@@ -78,6 +78,7 @@ template <typename Comparable> BinarySearchTree<Comparable> Indexer::FileFilterR
 	while (filterFile >> filterWord) {
 		//convert string word into Word object
 		Word word = Word(filterWord);
+		word.setType("filter");
 		filteredBST->insert(word);
 	}
 
@@ -111,40 +112,31 @@ template <typename Comparable> BinarySearchTree<Comparable> Indexer::FileWordRea
 		int index = 0;
 		//cout << "1\n";
 		while(!endOfLine) {
-			//cout << "2\n";
 			bool endOfWord = false;
 			while(!endOfWord) {
-				//cout << index << ": \t";
 				char lowered = (char)tolower(line[index]);
-				//cout << "| " << lowered << " |" << endl;
+
 				if(line[index] == ' ' || line[index] == '\0') {
-				//	cout << "SPACE OR EOL\n";
-					//cout << "Full Word: " << fullWord << "|" << endl;
+
 					if (fullWord.size() > 1)
 						RemovePunctuation(fullWord);
 
-				//	cout << "Punctuation is fine\n";
-
 					//check to see if word should be filtered out
 					Word word = Word(fullWord);
+					word.setType("indexed");
 					if (!filteredBST->contains(word) && fullWord.size() > 1) {
-						cout << fullWord << endl;
 						word.setCurrLineNum(lineCount);
 						indexedBST->insert(word);
-					} else {
-						//cout << "Filtering out '" << word << "' from datafile\n";
-					}
+					} 
 
 					endOfWord = true;
 
 					if (line[index] == '\0') {
-						//cout << "\nLINE ENDED\n";
 						endOfLine = true;
 						index = 0;
 					}
 				} else {
 					fullWord.append(1, lowered);
-					//cout << "\tAppended " << lowered << " to " << fullWord << endl;
 				}
 				index++;
 			}
