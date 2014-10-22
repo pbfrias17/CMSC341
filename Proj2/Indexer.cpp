@@ -21,11 +21,16 @@ void Indexer::DoIndex() {
 
 
 	if (FileExists(filterFilename) && FileExists(dataFilename)) {
+		//output goes to different files
+		ofstream output1("filterResults.txt");
 		*filteredBST = FileFilterReader<Word>(filterFilename);
 		filteredBST->printTree();
+		output1.close();
+
+		ofstream output2("output.txt");
 		*indexedBST = FileWordReader<Word>(dataFilename);
-		//cout << "Done inserting... now printing\n";
 		indexedBST->printTree();
+		output2.close();
 	} else {
 		cout << "Problem with the given files.\nExiting...";
 		exit(1);
