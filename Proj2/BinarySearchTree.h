@@ -1,3 +1,14 @@
+/**
+**File: BinarySearchTree.h
+**Author: Paolo Frias
+**Due Date: 10/21/14
+**Section: 03
+**
+** Holds the class definition of the BinarySearchTree class
+**which is the templated BST class with nodes and 
+**comparable type elements
+**/
+
 #ifndef BINARY_SEARCH_TREE_H
 #define BINARY_SEARCH_TREE_H
 

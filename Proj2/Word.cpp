@@ -1,3 +1,14 @@
+/**
+**File: Word.cpp
+**Author: Paolo Frias
+**Due Date: 10/21/14
+**Section: 03
+**
+** Holds the implementation of the Word class
+**which defines all the methods for interacting
+**with the Comparable Word objects
+**/
+
 #include "Word.h"
 #include <iostream>
 #include <cstdlib>
@@ -65,7 +76,6 @@ bool operator< (const Word &lhs, const Word &rhs) {
 ostream& operator<<(ostream& os, const Word &rhs) {
 	//Each tree needs different printing layouts
 	if (rhs.getType() == "indexed") {
-		//But this should also print out word count and line numbers!
 		queue<int> lines = rhs.getLineNumbers();
 		//layout must be right-justified
 		os << rhs.getWordText();

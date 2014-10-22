@@ -1,3 +1,14 @@
+/**
+**File: Indexer.cpp
+**Author: Paolo Frias
+**Due Date: 10/21/14
+**Section: 03
+**
+** Holds the implementation of the Indexer class
+**which defines all the methods for indexing through
+**the provided data text
+**/
+
 #include "Indexer.h"
 #include "BinarySearchTree.h"
 #include "Word.h"
@@ -15,10 +26,6 @@ Indexer::Indexer(string filter, string data)
 }
 
 void Indexer::DoIndex() {
-	//////
-	int stopper;
-	////////
-
 
 	if (FileExists(filterFilename) && FileExists(dataFilename)) {
 		//output goes to different files
@@ -40,7 +47,6 @@ void Indexer::DoIndex() {
 	filteredBST = NULL;
 	delete indexedBST;
 	indexedBST = NULL;
-	cin >> stopper;
 }
 
 bool Indexer::FileExists(const string &filename) {
@@ -59,29 +65,26 @@ bool Indexer::FileExists(const string &filename) {
 
 void Indexer::RemovePunctuation(string &word) {
 	int firstASCII = tolower(word[0]);
+	//remove anything that isn't alphanumeric (and not within a word)
 	while (firstASCII < 97 || firstASCII > 122) {
-		//cout << "Take out " << (char)firstASCII << endl;
 		word.erase(0, 1);
 		firstASCII = tolower(word[0]);
 	}
 
 	int lastASCII = tolower(word[word.size() - 1]);
 	while (lastASCII < 97 || lastASCII > 122) {
-		//cout << (char)lastASCII << endl;
 		word = word.substr(0, word.size() - 1);
 		lastASCII = tolower(word[word.size() - 1]);
 	}
 }
 
 template <typename Comparable> BinarySearchTree<Comparable> Indexer::FileFilterReader(string filename) {
-	//cout << "Creating a BST of Filterwords from " << filename << endl;
 	ifstream filterFile;
 
 	filterFile.open(filename.c_str(), ios_base::in);
 
 	string filterWord;
 	while (filterFile >> filterWord) {
-		//convert string word into Word object
 		Word word = Word(filterWord);
 		word.setType("filter");
 		filteredBST->insert(word);
@@ -94,7 +97,6 @@ template <typename Comparable> BinarySearchTree<Comparable> Indexer::FileFilterR
 
 
 template <typename Comparable> BinarySearchTree<Comparable> Indexer::FileWordReader(string filename) {
-	//cout << "\n\nCreating a BST of indexed words from " << filename << endl;
 	ifstream dataFile;
 	dataFile.open(filename.c_str(), ios_base::in);
 
@@ -108,14 +110,11 @@ template <typename Comparable> BinarySearchTree<Comparable> Indexer::FileWordRea
 		bool endOfLine = false;
 
 		//Check to see if the line is blank
-		if (line.size() == 0) {
-			//cout << "\nLINE IS EMPTY\n";
+		if (line.size() == 0)
 			endOfLine = true;
-		}
 
 		string fullWord;
 		int index = 0;
-		//cout << "1\n";
 		while(!endOfLine) {
 			bool endOfWord = false;
 			while(!endOfWord) {
@@ -151,5 +150,4 @@ template <typename Comparable> BinarySearchTree<Comparable> Indexer::FileWordRea
 	dataFile.close();
 
 	return *indexedBST;
-
 }
