@@ -1,8 +1,11 @@
 #ifndef HASHEDSPLAYS_H
 #define HASHEDSPLAYS_H
 
+#include "SplayTree.h"
+
 #include <iostream>
 #include <string>
+#include <vector>
 
 using namespace std;
 
@@ -25,6 +28,7 @@ public:
 
 
 private:
+	//vector<template SplayTree<Comparable> > tables;
 	int arraySize;
 };
 

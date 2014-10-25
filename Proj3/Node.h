@@ -12,7 +12,7 @@
 #define NODE_H
 
 #include <string>
-//#include "Util.h" // For some string functions
+#include "Util.h" // For some string functions
 
 using namespace std;
 

@@ -1,4 +1,5 @@
 #include "HashedSplays.h"
+#include "Util.h"
 #include <iostream>
 #include <typeinfo>
 
@@ -8,7 +9,13 @@ HashedSplays::HashedSplays(const int &size)
 : arraySize(size) {}
 
 void HashedSplays::FileReader(const string &filename) {
+	ifstream file;
+	if(Util::FileExists(filename)) {
+		file.open(filename.c_str(), ios_base::in);
+	}
 	cout << "Creating Splay Tree from file: " << filename << endl;
+
+	file.close();
 }
 
 void HashedSplays::PrintHashCountResults() {

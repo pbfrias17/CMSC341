@@ -57,10 +57,10 @@ bool Node::operator%(const Node& RHS) const
 {
     //We want to ignore case on this check
     string text = this->GetWord();
-    //text = Util::Lower(text);
+    text = Util::Lower(text);
     
     string compared = RHS.GetWord();
-   // compared = Util::Lower(compared);
+    compared = Util::Lower(compared);
     
     // If the substring is longer it really isn't a substring
     if (text.length() > compared.length()) {return false;}
