@@ -11,7 +11,8 @@
 #ifndef NODE_H
 #define NODE_H
 
-#include "Util.h" // For some string functions
+#include <string>
+//#include "Util.h" // For some string functions
 
 using namespace std;
 

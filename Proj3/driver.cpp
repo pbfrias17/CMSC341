@@ -10,10 +10,14 @@
  *
  *************************************************************/
 #include "HashedSplays.h"  // Includes constants
+#include "Exceptions.h"
 
 using namespace std;
 
 int main(int argc, char *argv[]) {
+	///
+	int stopper;
+	///
 
     try {
         // Instatiate the main object
@@ -25,7 +29,7 @@ int main(int argc, char *argv[]) {
         wordFrequecy.PrintHashCountResults();
         wordFrequecy.PrintTree(19); // Prints the "T" tree
         wordFrequecy.PrintTree("F");
-        wordFrequecy.PrintTree("K"); // should be mpty running input1
+        wordFrequecy.PrintTree("K"); // should be empty running input1
         wordFrequecy.FindAll("The"); // should find all the's (ignoring case)
         cout << endl;
     }
@@ -37,5 +41,8 @@ int main(int argc, char *argv[]) {
     
     //Uncomment for number of seconds running.
     //cout << clock() / (float)CLOCKS_PER_SEC) << endl;
+
+	cin >> stopper;
+
     return 0;
 }
