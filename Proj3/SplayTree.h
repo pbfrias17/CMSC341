@@ -112,6 +112,13 @@ class SplayTree
             printTree( root );
     }
 
+	void printRoot() const {
+		if(isEmpty())
+			cout << "This tree has no nodes.\n";
+		else
+			printRoot(root);
+	}
+
     void makeEmpty( )
     {
     /******************************
@@ -131,6 +138,8 @@ class SplayTree
     void insert( const Comparable & x )
     {
         static BinaryNode *newNode = NULL;
+
+		cout << "!\n";
 
         if( newNode == NULL )
             newNode = new BinaryNode;
@@ -212,6 +221,7 @@ private:
 
     BinaryNode *root;
     BinaryNode *nullNode;
+	int splays = 0;
 
     /**
      * Internal method to reclaim internal nodes in subtree t.
@@ -240,6 +250,10 @@ private:
             printTree( t->right );
         }
     }
+
+   void printRoot(BinaryNode *t) const {
+	   cout << "This tree starts with " << t->element << " and has\n";
+   }
 
     /**
      * Internal method to clone subtree.
@@ -281,6 +295,7 @@ private:
      */
     void splay( const Comparable & x, BinaryNode * & t )
     {
+		splays++;
         BinaryNode *leftTreeMax, *rightTreeMin;
         static BinaryNode header;
 

@@ -12,7 +12,11 @@ class Util {
 public:
 	Util();
 	static string Lower(const string &word) {
-		return word;
+		string lowered;
+		for(unsigned int letter = 0; letter < word.size(); letter++) {
+			lowered.push_back((char)tolower(word[letter]));
+		}
+		return lowered;
 	}
 
 	static bool FileExists(const string &filename) {
@@ -64,8 +68,7 @@ public:
 					}
 					index++;
 				}
-				if(fullWord.size() != 0) {
-					stripEnds(fullWord);
+				if(stripEnds(fullWord)) {
 					wordList.push_back(fullWord);
 					fullWord.clear();
 				}
@@ -74,20 +77,23 @@ public:
 		file.close();
 	}
 
-	static void stripEnds(string &word) {
-		//remove all characters from ends of the word that aren't letters
-		while(tolower(word[0]) < 97 || tolower(word[0] > 122)) {
+	static bool stripEnds(string &word) {
+		//if string is empty, strip nothing and return false
+		if(word.size() == 0)
+			return false;
+
+		//strip both sides until you hit a letter (on each side)
+		if(tolower(word[0]) < 97 || tolower(word[0]) > 122) {
 			word.erase(0, 1);
-		}
-
-		while(tolower(word[word.size() - 1]) < 97 || tolower(word[word.size() - 1]) > 122) {
+			return stripEnds(word);
+		} else if(tolower(word[word.size() - 1]) < 97 || tolower(word[word.size() - 1]) > 122) {
 			word = word.substr(0, word.size() - 1);
+			return stripEnds(word);
+		} else {
+			return true;
 		}
-	}
+	}	
 
-
-private:
-	int randomLOL;
 
 };
 

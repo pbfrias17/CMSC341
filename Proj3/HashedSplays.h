@@ -7,6 +7,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <array>
 
 using namespace std;
 
@@ -29,9 +30,12 @@ public:
 
 
 private:
-	vector<SplayTree<Node> > table;
+	const int m_trees;
+	//vector<SplayTree<Node> > table;
 	vector<string> wordsList;
-	int m_trees;
+	array<SplayTree<Node>, 26> table;
+
+	
 };
 
 #endif //HASHEDSPLAYS_H
