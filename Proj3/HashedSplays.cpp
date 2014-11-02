@@ -6,14 +6,20 @@
 HashedSplays::HashedSplays() {}
 
 HashedSplays::HashedSplays(const int &size) 
-: arraySize(size) {}
+: m_trees(size) {}
 
 void HashedSplays::FileReader(const string &filename) {
 	ifstream file;
 	if(Util::FileExists(filename)) {
-		file.open(filename.c_str(), ios_base::in);
+		cout << "Creating Splay Tree from file: " << filename << endl;
+		vector<string> wordList;
+		Util::extractWords(filename, wordList);
+		for(int i = 0; i < wordList.size(); i++) {
+			int first = tolower(wordList[i][0]);
+			cout << "Inserting " << wordList[i] << " into " << wordList[i][0] << " tree\n";
+			table[first - 97].insert(Node(wordList[i], 1));
+		}
 	}
-	cout << "Creating Splay Tree from file: " << filename << endl;
 
 	file.close();
 }

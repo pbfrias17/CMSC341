@@ -2,6 +2,7 @@
 #define HASHEDSPLAYS_H
 
 #include "SplayTree.h"
+#include "Node.h"
 
 #include <iostream>
 #include <string>
@@ -28,8 +29,9 @@ public:
 
 
 private:
-	//vector<template SplayTree<Comparable> > tables;
-	int arraySize;
+	vector<SplayTree<Node> > table;
+	vector<string> wordsList;
+	int m_trees;
 };
 
 #endif //HASHEDSPLAYS_H
