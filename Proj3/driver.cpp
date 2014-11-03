@@ -29,7 +29,7 @@ int main(int argc, char *argv[]) {
         wordFrequecy.PrintHashCountResults();
         wordFrequecy.PrintTree(19); // Prints the "T" tree
         wordFrequecy.PrintTree("J");
-        wordFrequecy.PrintTree("K"); // should be empty running input1
+        wordFrequecy.PrintTree("s"); // should be empty running input1
         wordFrequecy.FindAll("The"); // should find all the's (ignoring case)
         cout << endl;
     }

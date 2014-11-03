@@ -10,10 +10,6 @@ HashedSplays::HashedSplays(const int &size)
 : m_trees(size) {}
 
 void HashedSplays::FileReader(const string &filename) {
-
-	//int *foo;
-	int *foo = new int[5];
-
 	ifstream file;
 	if(Util::FileExists(filename)) {
 		cout << "Creating Splay Tree from file: " << filename << endl;
@@ -22,7 +18,10 @@ void HashedSplays::FileReader(const string &filename) {
 		for(unsigned int i = 0; i < wordList.size(); i++) {
 			int first = tolower(wordList[i][0]);
 			if(table[first - 97].contains(Node(wordList[i], 1))) {
-				cout << wordList[i] << " is already in tree.\n";
+				cout << wordList[i] << " is already in the '" << (char)first << "' tree.\n";
+				table[first - 97].printRoot();
+				table[first - 97].getRoot().IncrementFrequency();
+				table[first - 97].printRoot();
 			} else {
 				cout << "Inserting " << wordList[i] << " into " << first - 97 << " tree\n";
 				table[first - 97].insert(Node(wordList[i], 1));

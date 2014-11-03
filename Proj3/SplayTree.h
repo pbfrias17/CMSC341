@@ -3,6 +3,7 @@
 
 #include "dsexceptions.h"
 #include <iostream>        // For NULL
+#include "Node.h"
 using namespace std;
 
 // SplayTree class
@@ -99,10 +100,30 @@ class SplayTree
         return root->element == x;
     }
 
+	void printMatches(const Comparable &x) {
+		if(isEmpty()) {
+			bool exists = false;
+			cout << "No nodes matching target: " << x.getWord() << endl;
+		} else {
+			bool exists = true;
+		}
+
+		while(exists) {
+
+		}
+		Node(x.GetWord, 1);
+		splay(x, root);
+		return root->element == x;
+	}
+
     bool isEmpty( ) const
     {
         return root == nullNode;
     }
+
+	Node getRoot() const {
+		return root->element;
+	}
 
     void printTree( ) const
     {
@@ -236,7 +257,7 @@ private:
             delete t;
         }
     }
-    
+
     /**
      * Internal method to print a subtree t in sorted order.
      * WARNING: This is prone to running out of stack space.
