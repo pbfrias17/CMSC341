@@ -112,7 +112,17 @@ class SplayTree
 	}
 
 	void printMatches(const Comparable &x) {
-		cout << search(x) << endl;
+		bool resultFound = true;
+		while(resultFound) {
+			if(search(x) < x) {
+				cout << "The result: " << x << " is not LEGIT bruh..." << endl;
+				resultFound  = false;
+			} else {
+				Comparable found = search(x);
+				cout << found << endl;
+				remove(found);
+			}
+		}
 	}
 
     bool isEmpty( ) const

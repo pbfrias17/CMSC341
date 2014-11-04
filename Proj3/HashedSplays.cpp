@@ -53,5 +53,6 @@ void HashedSplays::PrintTree(const string &index) {
 void HashedSplays::FindAll(const string &target) {
 	cout << "\nNow finding all entries that start with '" << target << "': \n";
 	Node targetNode = Node(target, 1);
+	//SplayTree<Node> searchTable = table[tolower(target[0]) - 97].printMatches(targetNode);
 	table[tolower(target[0]) - 97].printMatches(targetNode);
 }
