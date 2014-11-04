@@ -100,20 +100,19 @@ class SplayTree
         return root->element == x;
     }
 
-	void printMatches(const Comparable &x) {
-		if(isEmpty()) {
-			bool exists = false;
-			cout << "No nodes matching target: " << x.getWord() << endl;
+	Comparable search(const Comparable & x)
+	{
+		if (isEmpty()) {
+			cout << "Tree is empty" << endl;
+			return x;
 		} else {
-			bool exists = true;
+			splay(x, root);
+			return root->element;
 		}
+	}
 
-		while(exists) {
-
-		}
-		Node(x.GetWord, 1);
-		splay(x, root);
-		return root->element == x;
+	void printMatches(const Comparable &x) {
+		cout << search(x) << endl;
 	}
 
     bool isEmpty( ) const
