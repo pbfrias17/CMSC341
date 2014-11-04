@@ -28,8 +28,8 @@ int main(int argc, char *argv[]) {
         // Test methods to show hashed splay trees work
         wordFrequecy.PrintHashCountResults();
         wordFrequecy.PrintTree(19); // Prints the "T" tree
-        wordFrequecy.PrintTree("F");
-        wordFrequecy.PrintTree("K"); // should be empty running input1
+        wordFrequecy.PrintTree("J");
+        wordFrequecy.PrintTree("s"); // should be empty running input1
         wordFrequecy.FindAll("The"); // should find all the's (ignoring case)
         cout << endl;
     }
