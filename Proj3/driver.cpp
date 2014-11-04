@@ -30,7 +30,8 @@ int main(int argc, char *argv[]) {
         wordFrequecy.PrintTree(19); // Prints the "T" tree
         wordFrequecy.PrintTree("J");
         wordFrequecy.PrintTree("s"); // should be empty running input1
-        wordFrequecy.FindAll("jay"); // should find all the's (ignoring case)
+
+		wordFrequecy.FindAll("th"); // should find all the's (ignoring case)
         cout << endl;
     }
     // Error catching

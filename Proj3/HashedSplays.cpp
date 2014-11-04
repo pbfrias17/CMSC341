@@ -55,4 +55,5 @@ void HashedSplays::FindAll(const string &target) {
 	Node targetNode = Node(target, 1);
 	//SplayTree<Node> searchTable = table[tolower(target[0]) - 97].printMatches(targetNode);
 	table[tolower(target[0]) - 97].printMatches(targetNode);
+
 }

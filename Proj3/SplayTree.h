@@ -100,11 +100,11 @@ class SplayTree
         return root->element == x;
     }
 
-	Comparable search(const Comparable & x)
+	const Comparable search(const Comparable & x)
 	{
 		if (isEmpty()) {
 			cout << "Tree is empty" << endl;
-			return x;
+			return Node("", 1);
 		} else {
 			splay(x, root);
 			return root->element;
@@ -114,12 +114,16 @@ class SplayTree
 	void printMatches(const Comparable &x) {
 		bool resultFound = true;
 		while(resultFound) {
-			if(search(x) < x) {
-				cout << "The result: " << x << " is not LEGIT bruh..." << endl;
+			Comparable found = search(x);
+			string comparedSubstring = Util::Lower(found.GetWord().substr(0, x.GetWord().size()));
+			cout << "Comparing " << comparedSubstring << " with " << x.GetWord() << endl;
+			//&& Util::Lower(foundSubstring) != x.GetWord()
+			if(comparedSubstring != x.GetWord()) {
+				cout << "The result: " << found << " is not LEGIT bruh..." << endl;
+				remove(found);
 				resultFound  = false;
 			} else {
-				Comparable found = search(x);
-				cout << found << endl;
+				cout << "Found: " << found << endl;
 				remove(found);
 			}
 		}
