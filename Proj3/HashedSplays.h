@@ -2,10 +2,12 @@
 #define HASHEDSPLAYS_H
 
 #include "SplayTree.h"
+#include "Node.h"
 
 #include <iostream>
 #include <string>
 #include <vector>
+#include <array>
 
 using namespace std;
 
@@ -28,8 +30,12 @@ public:
 
 
 private:
-	//vector<template SplayTree<Comparable> > tables;
-	int arraySize;
+	const int m_trees;
+	//vector<SplayTree<Node> > table;
+	vector<string> wordsList;
+	array<SplayTree<Node>, 26> table;
+
+	
 };
 
 #endif //HASHEDSPLAYS_H

@@ -3,6 +3,7 @@
 
 #include "dsexceptions.h"
 #include <iostream>        // For NULL
+#include "Node.h"
 using namespace std;
 
 // SplayTree class
@@ -99,10 +100,30 @@ class SplayTree
         return root->element == x;
     }
 
+	void printMatches(const Comparable &x) {
+		if(isEmpty()) {
+			bool exists = false;
+			cout << "No nodes matching target: " << x.getWord() << endl;
+		} else {
+			bool exists = true;
+		}
+
+		while(exists) {
+
+		}
+		Node(x.GetWord, 1);
+		splay(x, root);
+		return root->element == x;
+	}
+
     bool isEmpty( ) const
     {
         return root == nullNode;
     }
+
+	Node getRoot() const {
+		return root->element;
+	}
 
     void printTree( ) const
     {
@@ -111,6 +132,13 @@ class SplayTree
         else
             printTree( root );
     }
+
+	void printRoot() const {
+		if(isEmpty())
+			cout << "This tree has no nodes.\n";
+		else
+			printRoot(root);
+	}
 
     void makeEmpty( )
     {
@@ -131,6 +159,8 @@ class SplayTree
     void insert( const Comparable & x )
     {
         static BinaryNode *newNode = NULL;
+
+		cout << "!\n";
 
         if( newNode == NULL )
             newNode = new BinaryNode;
@@ -212,6 +242,7 @@ private:
 
     BinaryNode *root;
     BinaryNode *nullNode;
+	int splays = 0;
 
     /**
      * Internal method to reclaim internal nodes in subtree t.
@@ -226,7 +257,7 @@ private:
             delete t;
         }
     }
-    
+
     /**
      * Internal method to print a subtree t in sorted order.
      * WARNING: This is prone to running out of stack space.
@@ -240,6 +271,10 @@ private:
             printTree( t->right );
         }
     }
+
+   void printRoot(BinaryNode *t) const {
+	   cout << "This tree starts with " << t->element << " and has\n";
+   }
 
     /**
      * Internal method to clone subtree.
@@ -281,6 +316,7 @@ private:
      */
     void splay( const Comparable & x, BinaryNode * & t )
     {
+		splays++;
         BinaryNode *leftTreeMax, *rightTreeMin;
         static BinaryNode header;
 

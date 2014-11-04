@@ -78,6 +78,7 @@ bool Node::operator%(const Node& RHS) const
 //Increment the frequency
 void Node::IncrementFrequency()
 {
+	cout << m_word << ": +1 frequency\n";
     m_frequency++;
 }
 
