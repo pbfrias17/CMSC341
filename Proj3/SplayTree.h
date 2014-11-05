@@ -113,20 +113,20 @@ class SplayTree
 	}
 
 	void printMatches(const Comparable &x) {
-		bool resultFound = true;
-		while(resultFound) {
+		while(!this->isEmpty()) {
+			cout << "!";
 			Comparable found = search(x);
 			string comparedSubstring = Util::Lower(found.GetWord().substr(0, x.GetWord().size()));
-			//&& Util::Lower(foundSubstring) != x.GetWord()
+			//cout << comparedSubstring << " and " << x.GetWord() << endl;
 			if(comparedSubstring != x.GetWord()) {
 				cout << "\tFollowing is not a match: " << found.GetWord() << endl;
-				//remove(found);
-				resultFound  = false;
+				//resultFound  = false;
 			} else {
 				cout << "Found: " << found << endl;
-				remove(found);
 			}
+			remove(found);
 		}
+		cout << "Done searching...\n";
 	}
 
     bool isEmpty( ) const
@@ -257,7 +257,7 @@ private:
 
     BinaryNode *root;
     BinaryNode *nullNode;
-	int splays = 0;
+	int m_splays = 0;
 
     /**
      * Internal method to reclaim internal nodes in subtree t.
@@ -331,7 +331,7 @@ private:
      */
     void splay( const Comparable & x, BinaryNode * & t )
     {
-		splays++;
+		m_splays++;
         BinaryNode *leftTreeMax, *rightTreeMin;
         static BinaryNode header;
 
@@ -371,7 +371,7 @@ private:
         t->left = header.right;
         t->right = header.left;
     }
-
+	/*
 	void splayIgnoreCase(const Comparable & x, BinaryNode * t)
 	{
 		splays++;
@@ -382,8 +382,8 @@ private:
 		leftTreeMax = rightTreeMin = &header;
 
 		nullNode->element = x;   // Guarantee a match
-		this->printTree();
-		cout << endl;
+		//this->printTree();
+		//6cout << endl;
 
 		for(;;)
 		if(Util::Lower(x.GetWord()) < Util::Lower(t->element.GetWord()))
@@ -412,13 +412,14 @@ private:
 
 		//cout << "++Root: ";
 		//this->printRoot();
-		this->printTree();
+		//this->printTree();
 		cout << endl;
 		leftTreeMax->right = t->left;
 		rightTreeMin->left = t->right;
 		t->left = header.right;
 		t->right = header.left;
 	}
+	*/
 };
 
 #endif
