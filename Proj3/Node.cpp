@@ -74,6 +74,7 @@ bool Node::operator%(const Node& RHS) const
     return true;
 }
 
+//bool Node::caselessCompare(const Node)
 
 //Increment the frequency
 void Node::IncrementFrequency()

@@ -106,6 +106,7 @@ class SplayTree
 			cout << "Tree is empty" << endl;
 			return Node("", 1);
 		} else {
+			//splayIgnoreCase(x, root);
 			splay(x, root);
 			return root->element;
 		}
@@ -116,11 +117,10 @@ class SplayTree
 		while(resultFound) {
 			Comparable found = search(x);
 			string comparedSubstring = Util::Lower(found.GetWord().substr(0, x.GetWord().size()));
-			cout << "Comparing " << comparedSubstring << " with " << x.GetWord() << endl;
 			//&& Util::Lower(foundSubstring) != x.GetWord()
 			if(comparedSubstring != x.GetWord()) {
-				cout << "The result: " << found << " is not LEGIT bruh..." << endl;
-				remove(found);
+				cout << "\tFollowing is not a match: " << found.GetWord() << endl;
+				//remove(found);
 				resultFound  = false;
 			} else {
 				cout << "Found: " << found << endl;
@@ -208,24 +208,26 @@ class SplayTree
         newNode = NULL;   // So next insert will call new
     }
 
-    void remove( const Comparable & x )
-    {
-        BinaryNode *newTree;
+	void remove(const Comparable & x)
+	{
+		BinaryNode *newTree;
 
-            // If x is found, it will be at the root
-        if( !contains( x ) )
-            return;   // Item not found; do nothing
+		// If x is found, it will be at the root
+		if(!contains(x))
+			return;   // Item not found; do nothing
 
-        if( root->left == nullNode )
-            newTree = root->right;
-        else
-        {
-            // Find the maximum in the left subtree
-            // Splay it to the root; and then attach right child
-            newTree = root->left;
-            splay( x, newTree );
-            newTree->right = root->right;
-        }
+		if(root->left == nullNode) {
+			newTree = root->right;
+		}
+		else
+		{
+			// Find the maximum in the left subtree
+			// Splay it to the root; and then attach right child
+			newTree = root->left;
+			splay(x, newTree);
+			newTree->right = root->right;
+		}
+		
         delete root;
         root = newTree;
     }
@@ -369,6 +371,54 @@ private:
         t->left = header.right;
         t->right = header.left;
     }
+
+	void splayIgnoreCase(const Comparable & x, BinaryNode * t)
+	{
+		splays++;
+		BinaryNode *leftTreeMax, *rightTreeMin;
+		static BinaryNode header;
+
+		header.left = header.right = nullNode;
+		leftTreeMax = rightTreeMin = &header;
+
+		nullNode->element = x;   // Guarantee a match
+		this->printTree();
+		cout << endl;
+
+		for(;;)
+		if(Util::Lower(x.GetWord()) < Util::Lower(t->element.GetWord()))
+		{
+			if(Util::Lower(x.GetWord()) < Util::Lower(t->left->element.GetWord()))
+				rotateWithLeftChild(t);
+			if(t->left == nullNode)
+				break;
+			// Link Right
+			rightTreeMin->left = t;
+			rightTreeMin = t;
+			t = t->left;
+		} 
+		else if(Util::Lower(t->element.GetWord()) < Util::Lower(x.GetWord()))
+		{
+			if(Util::Lower(t->right->element.GetWord()) < Util::Lower(x.GetWord()))
+				rotateWithRightChild(t);
+			if(t->right == nullNode)
+				break;
+			// Link Left
+			leftTreeMax->right = t;
+			leftTreeMax = t;
+			t = t->right;
+		} else
+			break;
+
+		//cout << "++Root: ";
+		//this->printRoot();
+		this->printTree();
+		cout << endl;
+		leftTreeMax->right = t->left;
+		rightTreeMin->left = t->right;
+		t->left = header.right;
+		t->right = header.left;
+	}
 };
 
 #endif
