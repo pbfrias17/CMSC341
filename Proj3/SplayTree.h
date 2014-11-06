@@ -114,19 +114,13 @@ class SplayTree
 
 	void printMatches(const Comparable &x) {
 		while(!this->isEmpty()) {
-			cout << "!";
 			Comparable found = search(x);
 			string comparedSubstring = Util::Lower(found.GetWord().substr(0, x.GetWord().size()));
-			//cout << comparedSubstring << " and " << x.GetWord() << endl;
-			if(comparedSubstring != x.GetWord()) {
-				cout << "\tFollowing is not a match: " << found.GetWord() << endl;
-				//resultFound  = false;
-			} else {
-				cout << "Found: " << found << endl;
+			if(comparedSubstring == x.GetWord()) {
+				cout << found << endl;
 			}
 			remove(found);
 		}
-		cout << "Done searching...\n";
 	}
 
     bool isEmpty( ) const
@@ -171,8 +165,6 @@ class SplayTree
     void insert( const Comparable & x )
     {
         static BinaryNode *newNode = NULL;
-
-		cout << "!\n";
 
         if( newNode == NULL )
             newNode = new BinaryNode;

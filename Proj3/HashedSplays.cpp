@@ -1,3 +1,14 @@
+/**************************************************************
+* File:    HashedSplays.cpp
+* Project: CMSC 341 - Project 3 - Word Frequency
+* Author : Paolo B. Frias
+* Date   : 04-November-2014
+* Section: Lecture-02
+* E-mail:
+*
+* Node Class implementation.
+*************************************************************/
+
 #include "HashedSplays.h"
 #include "Util.h"
 #include <iostream>
@@ -18,12 +29,8 @@ void HashedSplays::FileReader(const string &filename) {
 		for (unsigned int i = 0; i < wordList.size(); i++) {
 			int first = tolower(wordList[i][0]);
 			if (table[first - 97].contains(Node(wordList[i], 1))) {
-				cout << wordList[i] << " is already in the '" << (char)first << "' tree.\n";
-				//table[first - 97].printRoot();
 				table[first - 97].getRoot().IncrementFrequency();
-				//table[first - 97].printRoot();
 			} else {
-				cout << "Inserting " << wordList[i] << " into " << first - 97 << " tree\n";
 				table[first - 97].insert(Node(wordList[i], 1));
 			}
 		}
@@ -35,8 +42,11 @@ void HashedSplays::FileReader(const string &filename) {
 void HashedSplays::PrintHashCountResults() {
 	cout << "\nPrinting out Hash count results... \n";
 	for (int i = 0; i < m_trees; i++) {
-		cout << "This tree starts with " << table[i].getRoot() << endl;
-		cout << " and has " << table[i].getNodeCount() << " nodes\n";
+		if(table[i].isEmpty()) {
+			cout << "Empty Tree" << endl;
+		} else {
+			cout << "This tree starts with " << table[i].getRoot() << " and has " << table[i].getNodeCount() << " nodes\n";
+		}
 	}
 
 }
