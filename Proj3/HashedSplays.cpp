@@ -55,6 +55,7 @@ void HashedSplays::PrintHashCountResults() {
 void HashedSplays::PrintTree(const int &index) {
 	cout << "\nPrinting tree of index " << index << endl;
 	table[index].printTree();
+	cout << "This tree had " << 
 }
 
 void HashedSplays::PrintTree(const string &index) {
