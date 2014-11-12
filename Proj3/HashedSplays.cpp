@@ -2,11 +2,11 @@
 * File:    HashedSplays.cpp
 * Project: CMSC 341 - Project 3 - Word Frequency
 * Author : Paolo B. Frias
-* Date   : 04-November-2014
+* Date   : 05-November-2014
 * Section: Lecture-02
 * E-mail:
 *
-* Node Class implementation.
+* HashedSplays Class implementation.
 *************************************************************/
 
 #include "HashedSplays.h"
@@ -28,6 +28,7 @@ void HashedSplays::FileReader(const string &filename) {
 		Util::extractWords(filename, wordList);
 		for (unsigned int i = 0; i < wordList.size(); i++) {
 			int first = tolower(wordList[i][0]);
+			//index and ascii tables are offset by 97
 			if (table[first - 97].contains(Node(wordList[i], 1))) {
 				table[first - 97].getRoot().IncrementFrequency();
 			} else {
@@ -66,6 +67,7 @@ void HashedSplays::PrintTree(const string &index) {
 void HashedSplays::FindAll(const string &target) {
 	cout << "\nNow finding all entries that start with '" << target << "': \n";
 	Node targetNode = Node(Util::Lower(target), 1);
+	//index and ascii tables are offset by 97
 	SplayTree<Node> searchTable = table[tolower(target[0]) - 97];
 	searchTable.printMatches(targetNode);
 

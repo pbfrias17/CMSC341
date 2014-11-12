@@ -1,3 +1,14 @@
+/**************************************************************
+* File:    Util.h
+* Project: CMSC 341 - Project 3 - Word Frequency
+* Author : Paolo B. Frias
+* Date   : 05-November-2014
+* Section: Lecture-02
+* E-mail:
+*
+* Util Class Definition.
+*************************************************************/
+
 #ifndef UTIL_H
 #define UTIL_H
 
@@ -11,6 +22,13 @@ using namespace std;
 class Util {
 public:
 	Util();
+
+	/**********************************************************************
+	* Name: Lower
+	* PreCondition: None
+	*
+	* PostCondition: Converts all characters of given string to lowercase
+	*********************************************************************/
 	static string Lower(const string &word) {
 		string lowered;
 		for(unsigned int letter = 0; letter < word.size(); letter++) {
@@ -19,6 +37,13 @@ public:
 		return lowered;
 	}
 
+	/**********************************************************************
+	* Name: FileExists
+	* PreCondition: None
+	*
+	* PostCondition: Checks to see if the given filename corresponds to an 
+	*   existing file
+	*********************************************************************/
 	static bool FileExists(const string &filename) {
 		ifstream file;
 		file.open(filename.c_str(), ios_base::in);
@@ -32,6 +57,13 @@ public:
 		return true;
 	}
 
+	/**********************************************************************
+	* Name: Lower
+	* PreCondition: Given gile must exist
+	*
+	* PostCondition: Extracts words from the given file and pushes them into 
+	*   an array
+	*********************************************************************/
 	static void extractWords(const string &filename, vector<string> &wordList) {
 		ifstream file;
 		file.open(filename.c_str(), ios_base::in);
@@ -77,6 +109,13 @@ public:
 		file.close();
 	}
 
+	/**********************************************************************
+	* Name: stripEnds
+	* PreCondition: None
+	*
+	* PostCondition: Strips all non-alphabetical characters from the ends
+	*   of the given word
+	*********************************************************************/
 	static bool stripEnds(string &word) {
 		//if string is empty, strip nothing and return false
 		if(word.size() == 0)

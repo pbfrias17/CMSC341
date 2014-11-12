@@ -1,3 +1,14 @@
+/**************************************************************
+* File:    SplayTree.h
+* Project: CMSC 341 - Project 3 - Word Frequency
+* Author : Paolo B. Frias
+* Date   : 05-November-2014
+* Section: Lecture-02
+* E-mail:
+*
+* SplayTree Class Defintion.
+*************************************************************/
+
 #ifndef SPLAY_TREE_H
 #define SPLAY_TREE_H
 
