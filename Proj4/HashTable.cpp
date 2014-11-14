@@ -10,13 +10,24 @@ HashTable::HashTable(int size)
 	m_HashTable = new int[size];
 	for(int i = 0; i < size; i++) {
 		m_HashTable[i] = NULL;
+		cout << "efoeifnoief" << m_HashTable[i] << endl;
 	}
 }
 
 HashTable::~HashTable() {
 	delete m_HashTable;
 }
+
+void HashTable::PrintTable() {
+	for(int i = 0; i < m_size; i++) {
+		if(m_HashTable[i] == NULL)
+			cout << m_HashTable[i] << endl;
+	}
+}
+
 void HashTable::LinearProbe(int randInts[]) {
+	int stopper;
+
 	for(int i = 0; i < m_size; i++) {
 		int hashVal = 0;
 		hashVal = randInts[i] % m_size;
@@ -36,6 +47,7 @@ void HashTable::LinearProbe(int randInts[]) {
 				} else {
 					cout << "\tIndex " << hashVal + probeNum << " is filled" << endl;
 					m_failedInserts++;
+					cin >> stopper;
 				}
 				probeNum++;
 			}

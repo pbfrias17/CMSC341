@@ -43,9 +43,11 @@ void ProbingSimulation::ReadInput() {
 }
 
 void ProbingSimulation::RunTests() {
-	/*cout << "Testing Linear:\n";
+
+	//LinearHashTable.PrintTable();
+
+	cout << "Testing Linear:\n";
 	LinearHashTable.LinearProbe(randInts);
-	*/
 	cout << "Testing Quadratic:\n";
 	QuadraticHashTable.QuadraticProbe(randInts);
 }
