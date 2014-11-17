@@ -10,6 +10,7 @@ public:
 	void LinearProbe(int randInts[]);
 	void QuadraticProbe(int randInts[]);
 	void DoubleHashProbe();
+	//friend int hash(int x);
 
 
 private:
@@ -19,7 +20,11 @@ private:
 	int m_totalInserts;
 	int m_successfulInserts;
 	int m_failedInserts;
+
+	bool findPos(int entry);
+	friend int hash(int x);
 };
 
 
 #endif
+

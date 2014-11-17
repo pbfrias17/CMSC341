@@ -16,9 +16,9 @@ public:
 	void RunTests();
 
 private:
+	// HashTable LinearHashTable;
 	HashTable LinearHashTable;
-	HashTable QuadraticHashTable;
-	HashTable DoubleHashTable;
+	//HashTable DoubleHashTable;
 
 	int* randInts;
 	string m_inputFile;

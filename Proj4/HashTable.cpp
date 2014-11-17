@@ -47,7 +47,7 @@ void HashTable::LinearProbe(int randInts[]) {
 				} else {
 					cout << "\tIndex " << hashVal + probeNum << " is filled" << endl;
 					m_failedInserts++;
-					cin >> stopper;
+					//cin >> stopper;
 				}
 				probeNum++;
 			}
@@ -65,7 +65,9 @@ void HashTable::LinearProbe(int randInts[]) {
 }
 
 void HashTable::QuadraticProbe(int randInts[]) {
-	for(int i = 0; i < m_size; i++) {
+	
+	
+	/*for(int i = 0; i < m_size; i++) {
 		int hashVal = 0;
 		hashVal = randInts[i] % m_size;
 		if(m_HashTable[hashVal] != NULL) {
@@ -98,4 +100,16 @@ void HashTable::QuadraticProbe(int randInts[]) {
 			break;
 		}
 	}
+	*/
+
+
+}
+
+bool HashTable::findPos(int entry) {
+	
+	return true;
+}
+
+int Hash(int x) {
+	return x % 17;
 }

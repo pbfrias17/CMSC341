@@ -13,6 +13,7 @@ ProbingSimulation::ProbingSimulation(string inputFilename, int N, int interval, 
 	randInts = new int[m_totalAmount];
 
 	LinearHashTable = HashTable(m_hashSize);
+	//QuadraticHashTable = new HashTable<int>(m_hashSize);
 
 }
 
@@ -48,6 +49,5 @@ void ProbingSimulation::RunTests() {
 
 	cout << "Testing Linear:\n";
 	LinearHashTable.LinearProbe(randInts);
-	cout << "Testing Quadratic:\n";
-	QuadraticHashTable.QuadraticProbe(randInts);
+
 }
