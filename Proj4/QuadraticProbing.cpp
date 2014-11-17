@@ -46,7 +46,7 @@ int hash( const string & key )
 {
     int hashVal = 0;
 
-    for( int i = 0; i < key.length( ); i++ )
+    for( unsigned int i = 0; i < key.length( ); i++ )
         hashVal = 37 * hashVal + key[ i ];
 
     return hashVal;

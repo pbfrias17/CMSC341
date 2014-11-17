@@ -1,3 +1,4 @@
+/*
 #include <iostream>
 #include "QuadraticProbing.h"
 using namespace std;
@@ -30,3 +31,4 @@ int main( )
 
     return 0;
 }
+*/
