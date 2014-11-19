@@ -52,12 +52,12 @@ void ProbingSimulation::ReadInput() {
 void ProbingSimulation::RunTests() {
 
 	int i = 0;
-	
+	/*
 	while(randInts[i] != NULL && !LinearHashTable->isFull()) {
 		cout << "Looking at " << randInts[i] << endl;
 		LinearHashTable->insert(randInts[i]);
 		i++;
-	}
+	}*/
 
 	i = 0;
 	while(randInts[i] != NULL && !QuadraticHashTable->isFull()) {

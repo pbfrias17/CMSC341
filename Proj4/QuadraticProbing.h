@@ -186,9 +186,10 @@ class HashTable
 		int pos = x;
 		int offset = 1;
 		while(array[pos].info == ACTIVE) {
+			cout << "index " << pos << " is active, moving on\n";
 			pos += offset;
 			offset += 2;
-			if(pos >= array.size()) {
+			while(pos >= array.size()) {
 				cout << pos << " >= " << array.size() << endl;
 				pos -= array.size();
 			}
