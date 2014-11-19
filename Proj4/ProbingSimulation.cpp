@@ -17,7 +17,7 @@ ProbingSimulation::ProbingSimulation(string inputFilename, int N, int interval, 
 
 	LinearHashTable = new HashTable<int>(1, m_hashSize);
 	QuadraticHashTable = new HashTable<int>(2, m_hashSize);
-	DoubleHashTable = new HashTable<int>(3, m_hashSize);
+	DoubleHashTable = new HashTable<int>(3, m_hashSize, m_largestPrime);
 
 	//QuadraticHashTable = new HashTable<int>(m_hashSize);
 

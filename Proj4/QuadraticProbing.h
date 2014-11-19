@@ -22,7 +22,7 @@ template <typename HashedObj>
 class HashTable
 {
   public:
-	  explicit HashTable(int type, int size = 101) : array(size), currentSize(size), totalInserts(0)
+	  explicit HashTable(int type, int size = 101, int largestPrime = 11) : array(size), currentSize(size), totalInserts(0), m_largestPrime(largestPrime)
     { 
 		makeType(type);
 		makeEmpty( ); 
@@ -48,7 +48,7 @@ class HashTable
     void makeEmpty( )
     {
         currentSize = 0;
-        for( int i = 0; i < array.size( ); i++ )
+        for( unsigned int i = 0; i < array.size( ); i++ )
             array[ i ].info = EMPTY;
     }
 
@@ -100,9 +100,10 @@ class HashTable
     vector<HashEntry> array;
     int currentSize;
 	ProbeType m_ProbeType;
-	int totalInserts;
-	int successfulInserts;
-	int failedInserts;
+	unsigned int totalInserts;
+	unsigned int successfulInserts;
+	unsigned int failedInserts;
+	unsigned int m_largestPrime;
 
 
     bool isActive( int currentPos ) const
@@ -115,92 +116,38 @@ class HashTable
 
         return currentPos;
     }
-	/*
-    void rehash( )
-    {
-        vector<HashEntry> oldArray = array;
 
-            // Create new double-sized, empty table
-        array.resize( nextPrime( 2 * oldArray.size( ) ) );
-        for( int j = 0; j < array.size( ); j++ )
-            array[ j ].info = EMPTY;
-
-            // Copy table over
-        currentSize = 0;
-        for( int i = 0; i < oldArray.size( ); i++ )
-            if( oldArray[ i ].info == ACTIVE )
-                insert( oldArray[ i ].element );
-    }*/
     int myhash( const HashedObj & x ) const
     {
 		int hashed = x % array.size();
 		int i = 0;
-		int finalHashed = (hashed + hash(i)) % array.size();
+		int finalHashed = (hashed + hash(x, i)) % array.size();
 		while (array[finalHashed].info == ACTIVE) {
 			i++;
 			cout << "-- Collision at index " << finalHashed << endl;
-			finalHashed = (hashed + hash(i)) % array.size();
+			finalHashed = (hashed + hash(x, i)) % array.size();
 		}
-
-        //if( hashVal < 0 )
-        //    hashVal += array.size( );
 
         return finalHashed;
     }
-	int hash(int probe) const {
+	int hash(const HashedObj &x, int probe) const {
 		switch (m_ProbeType) {
 		case LINEAR:
 			return probe;
 		case QUADRATIC:
 			return probe * probe;
 		case DOUBLE:
-			return probe * probe;
+			return probe * hash2(x, probe);
 		default:
 			return probe;
 		}
 	}	
 	
-	int hash2(const HashedObj &x) const {
+	int hash2(const HashedObj &x, int probe) const {
 		int R = m_largestPrime;
-		return R - x % array.size();
-	}
-	
-	int linearProbe(const HashedObj &x) const {
-		int pos = x;
-		while(array[pos].info == ACTIVE) {
-			pos++;
-			if(pos >= array.size()) {
-				cout << pos << " >= " << array.size() << endl;
-				pos -= array.size();
-			}
-			cout << "--Looking at index " << pos << endl;
-		}
-		return pos;
-	}
-	int quadraticProbe(const HashedObj &x) const {
-		int pos = x;
-		int offset = 1;
-		while(array[pos].info == ACTIVE) {
-			cout << "index " << pos << " is active, moving on\n";
-			pos += offset;
-			offset += 2;
-			while(pos >= array.size()) {
-				cout << pos << " >= " << array.size() << endl;
-				pos -= array.size();
-				//char stopper;
-				//cin >> stopper;
-			}
-			//cout << "--Looking at index " << pos << endl;
-		}
-		return pos;
+		return R - (x % R);
 	}
 
-	int doubleHashProbe(const HashedObj &x) const {
-		int pos = x;
-		int offset = 1;
-
-		return pos;
-	}
 };
 
 
