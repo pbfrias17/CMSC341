@@ -1,7 +1,8 @@
 #ifndef PROBINGSIMLUATION_H
 #define PROBINGSIMLUATION_H
 
-#include "HashTable.h"
+//#include "HashTable.h"
+#include "QuadraticProbing.h"
 #include <string>
 #include <cstdlib>
 
@@ -16,8 +17,11 @@ public:
 	void RunTests();
 
 private:
-	// HashTable LinearHashTable;
-	HashTable LinearHashTable;
+	//HashTable LinearHashTable;
+	HashTable<int> *LinearHashTable;
+	HashTable<int> *QuadraticHashTable;
+	HashTable<int> *DoubleHashTable;
+
 	//HashTable DoubleHashTable;
 
 	int* randInts;

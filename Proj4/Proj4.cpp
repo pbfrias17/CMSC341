@@ -21,7 +21,7 @@ int main(int argc, char* argv[]) {
 
 	PS->ReadInput();
 	PS->RunTests();
-	cout << "Done testing. Now Comparing results...\n";
+	//cout << "Done testing. Now Comparing results...\n";
 
 	//delete PS;
 

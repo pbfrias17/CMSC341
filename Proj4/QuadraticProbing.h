@@ -22,14 +22,29 @@ template <typename HashedObj>
 class HashTable
 {
   public:
-    explicit HashTable( int size = 101 ) : array( nextPrime( size ) )
-      { makeEmpty( ); }
+	  explicit HashTable(int type, int size = 101) : array(size), currentSize(size), totalInserts(0)
+    { 
+		makeType(type);
+		makeEmpty( ); 
+	}
 
     bool contains( const HashedObj & x ) const
     {
         return isActive( findPos( x ) );
     }
-
+	void makeType(int type) {
+		switch(type) {
+		case 1:
+			m_ProbeType = LINEAR;
+			break;
+		case 2:
+			m_ProbeType = QUADRATIC;
+			break;
+		case 3:
+			m_ProbeType = DOUBLE;
+			break;
+		}
+	}
     void makeEmpty( )
     {
         currentSize = 0;
@@ -37,18 +52,30 @@ class HashTable
             array[ i ].info = EMPTY;
     }
 
+	bool isFull() {
+		int stopper;
+		if(totalInserts >= array.size()) {
+			cout << "Table is full: " << totalInserts << " = " << array.size() << "\n";
+			cin >> stopper;
+			return true;
+		}
+		return false;
+	}
+
     bool insert( const HashedObj & x )
     {
-            // Insert x as active
+		totalInserts++;
+        // Insert x as active
         int currentPos = findPos( x );
-        if( isActive( currentPos ) )
-            return false;
+        //if( isActive( currentPos ) )
+        //    return false;
 
+		cout << "Inserting " << x << " into index " << currentPos << endl;
         array[ currentPos ] = HashEntry( x, ACTIVE );
 
             // Rehash; see Section 5.5
-        if( ++currentSize > array.size( ) / 2 )
-            rehash( );
+        //if( ++currentSize > array.size( ) / 2 )
+        //    rehash( );
 
         return true;
     }
@@ -64,6 +91,7 @@ class HashTable
     }
 
     enum EntryType { ACTIVE, EMPTY, DELETED };
+	enum ProbeType { LINEAR, QUADRATIC, DOUBLE};
 
   private:
     struct HashEntry
@@ -77,25 +105,38 @@ class HashTable
     
     vector<HashEntry> array;
     int currentSize;
+	ProbeType m_ProbeType;
+	int totalInserts;
+	int successfulInserts;
+	int failedInserts;
+
 
     bool isActive( int currentPos ) const
       { return array[ currentPos ].info == ACTIVE; }
 
     int findPos( const HashedObj & x ) const
-    {
-        int offset = 1;
-        int currentPos = myhash( x );
+	{
 
-          // Assuming table is half-empty, and table length is prime,
-          // this loop terminates
-        while( array[ currentPos ].info != EMPTY &&
-                array[ currentPos ].element != x )
-        {
-            currentPos += offset;  // Compute ith probe
-            offset += 2;
-            if( currentPos >= array.size( ) )
-                currentPos -= array.size( );
-        }
+		int currentPos = myhash(x);
+		
+		if(array[currentPos].info == ACTIVE) {
+			cout << "Collision at index " << currentPos << endl;
+			switch(m_ProbeType) {
+			case LINEAR:
+				currentPos = linearProbe(currentPos);
+				break;
+			case QUADRATIC:
+				currentPos = quadraticProbe(currentPos);
+				break;
+			case DOUBLE:
+				//cout << "Double Hash probing...\n";
+				break;
+			default:
+				//cout << "HashTable has no probing preference. Doing Linear...\n";
+				break;
+			}
+		}
+
 
         return currentPos;
     }
@@ -119,15 +160,43 @@ class HashTable
     {
         int hashVal = hash( x );
 
-        hashVal %= array.size( );
+        //hashVal %= array.size( );
         if( hashVal < 0 )
             hashVal += array.size( );
 
         return hashVal;
     }
+	int hash(const HashedObj &x) const {
+		//cout << x << " % " << array.size() << " + " << x % array.size() << endl;
+		return x % array.size();
+	}
+	int linearProbe(const HashedObj &x) const {
+		int pos = x;
+		while(array[pos].info == ACTIVE) {
+			pos++;
+			if(pos >= array.size()) {
+				cout << pos << " >= " << array.size() << endl;
+				pos -= array.size();
+			}
+			cout << "--Looking at index " << pos << endl;
+		}
+		return pos;
+	}
+	int quadraticProbe(const HashedObj &x) const {
+		int pos = x;
+		int offset = 1;
+		while(array[pos].info == ACTIVE) {
+			pos += offset;
+			offset += 2;
+			if(pos >= array.size()) {
+				cout << pos << " >= " << array.size() << endl;
+				pos -= array.size();
+			}
+			cout << "--Looking at index " << pos << endl;
+		}
+		return pos;
+	}
 };
 
-int hash( const string & key );
-int hash( int key );
 
 #endif

@@ -11,8 +11,14 @@ ProbingSimulation::ProbingSimulation(string inputFilename, int N, int interval, 
 :m_inputFile(inputFilename), m_totalAmount(N), m_interval(interval), m_hashSize(M) {
 	
 	randInts = new int[m_totalAmount];
+	for(int i = 0; i < m_totalAmount; i++) {
+		randInts[i] = NULL;
+	}
 
-	LinearHashTable = HashTable(m_hashSize);
+	LinearHashTable = new HashTable<int>(1, m_hashSize);
+	QuadraticHashTable = new HashTable<int>(2, m_hashSize);
+	DoubleHashTable = new HashTable<int>(3, m_hashSize);
+
 	//QuadraticHashTable = new HashTable<int>(m_hashSize);
 
 }
@@ -45,9 +51,20 @@ void ProbingSimulation::ReadInput() {
 
 void ProbingSimulation::RunTests() {
 
-	//LinearHashTable.PrintTable();
+	int i = 0;
+	
+	while(randInts[i] != NULL && !LinearHashTable->isFull()) {
+		cout << "Looking at " << randInts[i] << endl;
+		LinearHashTable->insert(randInts[i]);
+		i++;
+	}
 
-	cout << "Testing Linear:\n";
-	LinearHashTable.LinearProbe(randInts);
+	i = 0;
+	while(randInts[i] != NULL && !QuadraticHashTable->isFull()) {
+		cout << "Looking at " << randInts[i] << endl;
+		QuadraticHashTable->insert(randInts[i]);
+		i++;
+	}
+	
 
 }

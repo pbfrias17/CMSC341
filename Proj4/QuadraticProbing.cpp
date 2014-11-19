@@ -28,7 +28,7 @@ bool isPrime( int n )
 int nextPrime( int n )
 {
     if( n <= 0 )
-        n == 3;
+        n = 3;
 
     if( n % 2 == 0 )
         n++;
@@ -54,8 +54,9 @@ int hash( const string & key )
 
 /**
  * A hash routine for ints.
- */
+
 int hash( int key )
 {
     return key;
 }
+*/
