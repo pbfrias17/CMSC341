@@ -17,7 +17,7 @@ int main(int argc, char* argv[]) {
 	const int M = atoi(argv[4]);
 	int largestPrime = atoi(argv[5]);
 
-	ProbingSimulation* PS = new ProbingSimulation(inputFilename, N, INTERVAL, M); 
+	ProbingSimulation* PS = new ProbingSimulation(inputFilename, N, INTERVAL, M, largestPrime); 
 
 	PS->ReadInput();
 	PS->RunTests();

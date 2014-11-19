@@ -11,7 +11,7 @@ using namespace std;
 class ProbingSimulation {
 public:
 	ProbingSimulation();
-	ProbingSimulation(string inputFilename, int N, int interval, int M);
+	ProbingSimulation(string inputFilename, int N, int interval, int M, int largestPrime);
 	~ProbingSimulation();
 	void ReadInput();
 	void RunTests();
@@ -28,7 +28,8 @@ private:
 	string m_inputFile;
 	int m_totalAmount;
 	int m_interval;
-	int m_hashSize; 
+	int m_hashSize;
+	int m_largestPrime;
 
 };
 

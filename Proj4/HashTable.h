@@ -9,7 +9,7 @@ public:
 	void PrintTable();
 	void LinearProbe(int randInts[]);
 	void QuadraticProbe(int randInts[]);
-	void DoubleHashProbe();
+	void DoubleHashProbe(int randInts[]);
 	//friend int hash(int x);
 
 

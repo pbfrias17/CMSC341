@@ -1,14 +1,14 @@
 #include "ProbingSimulation.h"
 #include <fstream>
 #include <iostream>
-
+#include <fstream>
 
 using namespace std;
 
 ProbingSimulation::ProbingSimulation() {}
 
-ProbingSimulation::ProbingSimulation(string inputFilename, int N, int interval, int M)
-:m_inputFile(inputFilename), m_totalAmount(N), m_interval(interval), m_hashSize(M) {
+ProbingSimulation::ProbingSimulation(string inputFilename, int N, int interval, int M, int largestPrime)
+:m_inputFile(inputFilename), m_totalAmount(N), m_interval(interval), m_hashSize(M), m_largestPrime(largestPrime) {
 	
 	randInts = new int[m_totalAmount];
 	for(int i = 0; i < m_totalAmount; i++) {
@@ -53,7 +53,7 @@ void ProbingSimulation::RunTests() {
 
 	int i = 0;
 	
-	while(randInts[i] != NULL && !LinearHashTable->isFull()) {
+	/*while(randInts[i] != NULL && !LinearHashTable->isFull()) {
 		cout << "Looking at " << randInts[i] << endl;
 		LinearHashTable->insert(randInts[i]);
 		i++;
@@ -64,7 +64,16 @@ void ProbingSimulation::RunTests() {
 		cout << "Looking at " << randInts[i] << endl;
 		QuadraticHashTable->insert(randInts[i]);
 		i++;
+	}*/
+
+	i = 0;
+	while (randInts[i] != NULL && !DoubleHashTable->isFull()) {
+		cout << "Looking at " << randInts[i] << endl;
+		DoubleHashTable->insert(randInts[i]);
+		i++;
 	}
+
+
 	
 
 }

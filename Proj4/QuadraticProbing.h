@@ -119,7 +119,7 @@ class HashTable
 
 		int currentPos = myhash(x);
 		
-		if(array[currentPos].info == ACTIVE) {
+		while(array[currentPos].info == ACTIVE) {
 			cout << "Collision at index " << currentPos << endl;
 			switch(m_ProbeType) {
 			case LINEAR:
@@ -129,7 +129,7 @@ class HashTable
 				currentPos = quadraticProbe(currentPos);
 				break;
 			case DOUBLE:
-				//cout << "Double Hash probing...\n";
+				currentPos = doubleHashProbe(currentPos);
 				break;
 			default:
 				//cout << "HashTable has no probing preference. Doing Linear...\n";
@@ -140,7 +140,7 @@ class HashTable
 
         return currentPos;
     }
-
+	/*
     void rehash( )
     {
         vector<HashEntry> oldArray = array;
@@ -155,7 +155,7 @@ class HashTable
         for( int i = 0; i < oldArray.size( ); i++ )
             if( oldArray[ i ].info == ACTIVE )
                 insert( oldArray[ i ].element );
-    }
+    }*/
     int myhash( const HashedObj & x ) const
     {
         int hashVal = hash( x );
@@ -206,6 +206,13 @@ class HashTable
 			}
 			//cout << "--Looking at index " << pos << endl;
 		}
+		return pos;
+	}
+
+	int doubleHashProbe(const HashedObj &x) const {
+		int pos = x;
+		int offset = 1;
+
 		return pos;
 	}
 };
