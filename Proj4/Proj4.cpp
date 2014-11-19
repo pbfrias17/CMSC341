@@ -9,7 +9,7 @@ using namespace std;
 
 int main(int argc, char* argv[]) {
 
-	int stopper;
+	char stopper;
 
 	string inputFilename = argv[1];
 	int N = atoi(argv[2]);
@@ -21,9 +21,19 @@ int main(int argc, char* argv[]) {
 
 	PS->ReadInput();
 	PS->RunTests();
-	//cout << "Done testing. Now Comparing results...\n";
+	cout << "Done testing. Now Comparing results...\n";
 
 	//delete PS;
+
+	/*int num = 0;
+	int offset = 1;
+	while(num != 6) {
+		num += offset;
+		offset += 2;
+		while(num >= 17)
+			num -= 17;
+		cout << num % 17 << endl;
+	}*/
 
 	cin >> stopper;
 	return 0;

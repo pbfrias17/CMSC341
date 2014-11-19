@@ -192,8 +192,10 @@ class HashTable
 			while(pos >= array.size()) {
 				cout << pos << " >= " << array.size() << endl;
 				pos -= array.size();
+				//char stopper;
+				//cin >> stopper;
 			}
-			cout << "--Looking at index " << pos << endl;
+			//cout << "--Looking at index " << pos << endl;
 		}
 		return pos;
 	}
