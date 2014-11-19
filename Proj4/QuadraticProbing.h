@@ -65,17 +65,11 @@ class HashTable
     bool insert( const HashedObj & x )
     {
 		totalInserts++;
-        // Insert x as active
+
         int currentPos = findPos( x );
-        //if( isActive( currentPos ) )
-        //    return false;
 
 		cout << "Inserting " << x << " into index " << currentPos << endl;
         array[ currentPos ] = HashEntry( x, ACTIVE );
-
-            // Rehash; see Section 5.5
-        //if( ++currentSize > array.size( ) / 2 )
-        //    rehash( );
 
         return true;
     }
@@ -118,25 +112,6 @@ class HashTable
 	{
 
 		int currentPos = myhash(x);
-		
-		while(array[currentPos].info == ACTIVE) {
-			cout << "Collision at index " << currentPos << endl;
-			switch(m_ProbeType) {
-			case LINEAR:
-				currentPos = linearProbe(currentPos);
-				break;
-			case QUADRATIC:
-				currentPos = quadraticProbe(currentPos);
-				break;
-			case DOUBLE:
-				currentPos = doubleHashProbe(currentPos);
-				break;
-			default:
-				//cout << "HashTable has no probing preference. Doing Linear...\n";
-				break;
-			}
-		}
-
 
         return currentPos;
     }
@@ -158,27 +133,38 @@ class HashTable
     }*/
     int myhash( const HashedObj & x ) const
     {
-        int hashVal = hash( x );
+		int hashed = x % array.size();
+		int i = 0;
+		int finalHashed = (hashed + hash(i)) % array.size();
+		while (array[finalHashed].info == ACTIVE) {
+			i++;
+			cout << "-- Collision at index " << finalHashed << endl;
+			finalHashed = (hashed + hash(i)) % array.size();
+		}
 
-        if( hashVal < 0 )
-            hashVal += array.size( );
+        //if( hashVal < 0 )
+        //    hashVal += array.size( );
 
-        return hashVal;
+        return finalHashed;
     }
-	int hash(const HashedObj &x) const {
-		//cout << x << " % " << array.size() << " + " << x % array.size() << endl;
-		return x % array.size();
+	int hash(int probe) const {
+		switch (m_ProbeType) {
+		case LINEAR:
+			return probe;
+		case QUADRATIC:
+			return probe * probe;
+		case DOUBLE:
+			return probe * probe;
+		default:
+			return probe;
+		}
 	}	
 	
 	int hash2(const HashedObj &x) const {
-		int R = previousPrime(x);
-		return x % array.size();
+		int R = m_largestPrime;
+		return R - x % array.size();
 	}
 	
-	int previousPrime(const HashedObj &x) const {
-		return 11;
-	}
-
 	int linearProbe(const HashedObj &x) const {
 		int pos = x;
 		while(array[pos].info == ACTIVE) {
