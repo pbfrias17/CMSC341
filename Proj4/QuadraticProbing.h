@@ -160,7 +160,6 @@ class HashTable
     {
         int hashVal = hash( x );
 
-        //hashVal %= array.size( );
         if( hashVal < 0 )
             hashVal += array.size( );
 
@@ -169,7 +168,17 @@ class HashTable
 	int hash(const HashedObj &x) const {
 		//cout << x << " % " << array.size() << " + " << x % array.size() << endl;
 		return x % array.size();
+	}	
+	
+	int hash2(const HashedObj &x) const {
+		int R = previousPrime(x);
+		return x % array.size();
 	}
+	
+	int previousPrime(const HashedObj &x) const {
+		return 11;
+	}
+
 	int linearProbe(const HashedObj &x) const {
 		int pos = x;
 		while(array[pos].info == ACTIVE) {
