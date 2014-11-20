@@ -51,29 +51,36 @@ void ProbingSimulation::ReadInput() {
 
 void ProbingSimulation::RunTests() {
 
+	cout << "Linear Probing Analysis (Table size = " << m_hashSize << ")\n";
 	int i = 0;
-	
-	/*while(randInts[i] != NULL && !LinearHashTable->isFull()) {
-		cout << "Looking at " << randInts[i] << endl;
+	HashTable<int> *FinalHashTable = LinearHashTable;
+	while(randInts[i] != NULL && !LinearHashTable->isFull()) {
+		LinearHashTable->incrementN();
+		//cout << LinearHashTable->getCurrentN() << " Looking at " << randInts[i] << endl;
 		LinearHashTable->insert(randInts[i]);
 		i++;
 	}
-
+	FinalHashTable->printStatistics();
+	
+	
+	cout << "Quadratic Probing Analysis (Table size = " << m_hashSize << ")\n";
 	i = 0;
 	while(randInts[i] != NULL && !QuadraticHashTable->isFull()) {
-		cout << "Looking at " << randInts[i] << endl;
+		//cout << "Looking at " << randInts[i] << endl;
 		QuadraticHashTable->insert(randInts[i]);
 		i++;
-	}*/
+	}
+	FinalHashTable = QuadraticHashTable;
+	FinalHashTable->printStatistics();
 
+	cout << "Doublehash Probing Analysis (Table size = " << m_hashSize << ")\n";
 	i = 0;
 	while (randInts[i] != NULL && !DoubleHashTable->isFull()) {
-		cout << "Looking at " << randInts[i] << endl;
+		//cout << "Looking at " << randInts[i] << endl;
 		DoubleHashTable->insert(randInts[i]);
 		i++;
 	}
-
-
-	
+	FinalHashTable = DoubleHashTable;
+	FinalHashTable->printStatistics();
 
 }

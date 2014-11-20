@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <string>
+#include <iomanip>
 using namespace std;
 
 int nextPrime( int n );
@@ -22,7 +23,7 @@ template <typename HashedObj>
 class HashTable
 {
   public:
-	  explicit HashTable(int type, int size = 101, int largestPrime = 11) : array(size), currentSize(size), totalInserts(0), m_largestPrime(largestPrime)
+	  explicit HashTable(int type, int size = 101, int largestPrime = 11) : array(size), currentSize(size), totalInserts(0), m_largestPrime(largestPrime), N(0), currentMaxProbes(0)
     { 
 		makeType(type);
 		makeEmpty( ); 
@@ -53,10 +54,8 @@ class HashTable
     }
 
 	bool isFull() {
-		int stopper;
-		if(totalInserts >= array.size()) {
-			cout << "Table is full: " << totalInserts << " = " << array.size() << "\n";
-			cin >> stopper;
+		if(successfulInserts >= array.size()) {
+			//cout << "Table is full: " << successfulInserts << " = " << array.size() << "\n";
 			return true;
 		}
 		return false;
@@ -66,10 +65,16 @@ class HashTable
     {
 		totalInserts++;
 
-        int currentPos = findPos( x );
+        unsigned int currentPos = findPos( x );
 
-		cout << "Inserting " << x << " into index " << currentPos << endl;
-        array[ currentPos ] = HashEntry( x, ACTIVE );
+		if(currentPos > array.size()) {
+			//cout << "!! Unsuccessful Insert\n";
+			unsuccessfulInserts++;
+		} else {
+			//cout << "Inserting " << x << " into index " << currentPos << endl;
+			successfulInserts++;
+			array[ currentPos ] = HashEntry( x, ACTIVE );
+		}
 
         return true;
     }
@@ -84,8 +89,106 @@ class HashTable
         return true;
     }
 
+	void incrementN() {
+		N++;
+	}
+
+	void incrementProbes() {
+		totalProbes++;
+	}
+
+	int getProbes() const {
+		return totalProbes;
+	}
+
+	float getProbeAvg() const {
+		return (float)totalProbes / (float)totalInserts;
+	}
+
+	int getMaxProbes() const {
+		return currentMaxProbes;
+	}
+
+	int getCurrentN() const {
+		return N;
+	}
+	int getTotalInserts() const 
+	{	return successfulInserts + unsuccessfulInserts; }
+
+	int getSuccessfulInserts() const
+	{
+		return successfulInserts;
+	}
+
+	int getUnsuccessfulInserts() const
+	{
+		return unsuccessfulInserts;
+	}
+
+	int getTotalClusters() const {
+		return totalClusterAmount;
+	}
+	
+	float getClusterAvg() const {
+		return (float)sumOfClusters / (float)getTotalClusters();
+	}
+	
+	int getMaxCluster() const {
+		return maxClusterLength;
+	}
+
+	void getClusterStatistics() {
+		int clusterLength = 0;
+		int maxLength = 0;
+		int clusterAmount = 0;
+		int clusterSum = 0;
+
+		for(unsigned int i = 0; i < array.size(); i++) {
+			if(array[i].info == ACTIVE) {
+				clusterLength++;
+				
+				if(i == array.size() - 1) {
+					clusterAmount++;
+					clusterSum += clusterLength;
+					if (clusterLength > maxLength)
+						maxLength = clusterLength;
+				}
+
+			} else {
+				if (clusterLength > maxLength)
+					maxLength = clusterLength;
+			
+				clusterSum += clusterLength;
+				clusterLength = 0;
+				if(maxLength != 0 && array[i - 1].info != EMPTY)
+					clusterAmount++;
+			}
+		}
+		maxClusterLength = maxLength;
+		totalClusterAmount = clusterAmount;
+		sumOfClusters = clusterSum;
+
+	}
+
+	void printStatistics() {
+		cout << "N: " << getTotalInserts() << endl;
+		cout << "Lambda = " << setprecision(3) << getSuccessfulInserts() / array.size() << endl;
+		cout << "Successful Inserts: " << getSuccessfulInserts() << endl;
+		cout << "Unsuccessful Inserts: " << getUnsuccessfulInserts() << endl << endl;
+
+		cout << "Total Probes: " << getProbes() << endl;
+		cout << "Probe Avg: " << setprecision(3) << getProbeAvg() << endl;
+		cout << "Max: " << getMaxProbes() << endl << endl;
+
+		getClusterStatistics();
+		cout << "Clusters: " << getTotalClusters() << endl;
+		cout << "Cluster Avg: " << setprecision(3) << getClusterAvg() << endl;
+		cout << "Max: " << getMaxCluster() << endl << endl << endl << endl;
+
+	}
+
     enum EntryType { ACTIVE, EMPTY, DELETED };
-	enum ProbeType { LINEAR, QUADRATIC, DOUBLE};
+	enum ProbeType { LINEAR, QUADRATIC, DOUBLE };
 
   private:
     struct HashEntry
@@ -100,36 +203,76 @@ class HashTable
     vector<HashEntry> array;
     int currentSize;
 	ProbeType m_ProbeType;
+	unsigned int N;
 	unsigned int totalInserts;
 	unsigned int successfulInserts;
-	unsigned int failedInserts;
+	unsigned int unsuccessfulInserts;
+	unsigned int totalProbes;
 	unsigned int m_largestPrime;
+	unsigned int currentMaxProbes;
+	unsigned int maxClusterLength;
+	unsigned int totalClusterAmount;
+	unsigned int sumOfClusters;
 
 
     bool isActive( int currentPos ) const
       { return array[ currentPos ].info == ACTIVE; }
 
-    int findPos( const HashedObj & x ) const
+    int findPos( const HashedObj & x )
 	{
-
 		int currentPos = myhash(x);
 
         return currentPos;
     }
 
-    int myhash( const HashedObj & x ) const
+    int myhash( const HashedObj & x )
     {
 		int hashed = x % array.size();
 		int i = 0;
 		int finalHashed = (hashed + hash(x, i)) % array.size();
+		
+		int *allKeys;
+		int keyNum = 0;
+		allKeys = new int[array.size()];
+
+		int maxProbes = 0;
+
+		maxProbes++;
 		while (array[finalHashed].info == ACTIVE) {
 			i++;
-			cout << "-- Collision at index " << finalHashed << endl;
+			maxProbes++;
+			
+			//cout << "-- Collision at index " << finalHashed << endl;
+			if(match(allKeys, finalHashed)) {
+				//cout << "FAILURE!!!!\n";
+				return array.size() + 1;
+			} else {
+				allKeys[keyNum] = finalHashed;
+			}
+			keyNum++;
+
 			finalHashed = (hashed + hash(x, i)) % array.size();
 		}
+		totalProbes += maxProbes;
+		if(currentMaxProbes < maxProbes)
+			currentMaxProbes = maxProbes;
+
+
+		//delete allKeys;
+		//allKeys = NULL;
 
         return finalHashed;
     }
+
+	bool match(int keys[], int key) {
+
+		for(int i = 0; i < array.size(); i++) {
+			if(keys[i] == key)
+				return true;
+		}
+		return false;
+	}
+
 	int hash(const HashedObj &x, int probe) const {
 		switch (m_ProbeType) {
 		case LINEAR:
@@ -139,6 +282,7 @@ class HashTable
 		case DOUBLE:
 			return probe * hash2(x, probe);
 		default:
+			//choose linear probing by default
 			return probe;
 		}
 	}	
