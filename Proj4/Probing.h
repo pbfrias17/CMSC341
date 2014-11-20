@@ -1,5 +1,5 @@
-#ifndef QUADRATIC_PROBING_H
-#define QUADRATIC_PROBING_H
+#ifndef PROBING_H
+#define PROBING_H
 
 #include <vector>
 #include <string>

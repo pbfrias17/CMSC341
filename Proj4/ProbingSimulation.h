@@ -1,8 +1,7 @@
 #ifndef PROBINGSIMLUATION_H
 #define PROBINGSIMLUATION_H
 
-//#include "HashTable.h"
-#include "QuadraticProbing.h"
+#include "Probing.h"
 #include <string>
 #include <cstdlib>
 
