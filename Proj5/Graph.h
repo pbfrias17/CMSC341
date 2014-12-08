@@ -14,10 +14,7 @@ public:
 	Graph(string inputFile);
 	int trips(int start, int end, int tourists);
 private:
-	Route *m_Graph;
-
-private:
-	
+	Route *m_Graph;	
 
 
 };
