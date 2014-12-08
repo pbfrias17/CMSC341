@@ -1,9 +1,20 @@
+/**************************************************************
+* File:     Probing.h
+* Project:  CMSC 341 - Project 4
+* Author:   Paolo Frias
+* Due Date: 18-November-2014
+* Section:  Lecture-02
+* E-mail:   pfrias2@umbc.edu
+*
+* Probing class definition
+*************************************************************/
+
 #ifndef PROBING_H
 #define PROBING_H
 
+#include <iostream>
 #include <vector>
 #include <string>
-#include <iomanip>
 using namespace std;
 
 int nextPrime( int n );
@@ -13,11 +24,14 @@ int nextPrime( int n );
 // CONSTRUCTION: an approximate initial size or default of 101
 //
 // ******************PUBLIC OPERATIONS*********************
+
+// bool contains( x )     --> Return true if x is present
+// void makeType( type)   --> Classifies hashtable accordingly
+// void makeEmpty( )      --> Remove all items
+// bool isFull()          --> Verifies if array/vector is full
 // bool insert( x )       --> Insert x
 // bool remove( x )       --> Remove x
-// bool contains( x )     --> Return true if x is present
-// void makeEmpty( )      --> Remove all items
-// int hash( string str ) --> Global method to hash strings
+// 
 
 template <typename HashedObj>
 class HashTable
@@ -54,10 +68,9 @@ class HashTable
     }
 
 	bool isFull() {
-		if(successfulInserts >= array.size()) {
-			//cout << "Table is full: " << successfulInserts << " = " << array.size() << "\n";
+		if(successfulInserts >= array.size())
 			return true;
-		}
+
 		return false;
 	}
 
@@ -68,10 +81,8 @@ class HashTable
         unsigned int currentPos = findPos( x );
 
 		if(currentPos > array.size()) {
-			//cout << "!! Unsuccessful Insert\n";
 			unsuccessfulInserts++;
 		} else {
-			//cout << "Inserting " << x << " into index " << currentPos << endl;
 			successfulInserts++;
 			array[ currentPos ] = HashEntry( x, ACTIVE );
 		}
@@ -89,6 +100,10 @@ class HashTable
         return true;
     }
 
+	/********************************
+	// Various incrementers, accessors
+	//
+	********************************/
 	void incrementN() {
 		N++;
 	}
@@ -137,6 +152,13 @@ class HashTable
 		return maxClusterLength;
 	}
 
+	/**********************************************************************
+	* Name: getClusterStatistics
+	* PreCondition: None
+	*
+	* PostCondition: Goes through the hashtable and counts clusters and
+	*records the largest cluster size
+	*********************************************************************/
 	void getClusterStatistics() {
 		int clusterLength = 0;
 		int maxLength = 0;
@@ -170,24 +192,46 @@ class HashTable
 
 	}
 
+	/**********************************************************************
+	* Name: printStatistics
+	* PreCondition: None
+	*
+	* PostCondition: Prints out all desired statistics of Hashtable efficiency
+	*********************************************************************/
 	void printStatistics() {
-		cout << "N: " << getTotalInserts() << endl;
-		cout << "Lambda = " << setprecision(3) << getSuccessfulInserts() / array.size() << endl;
-		cout << "Successful Inserts: " << getSuccessfulInserts() << endl;
-		cout << "Unsuccessful Inserts: " << getUnsuccessfulInserts() << endl << endl;
+		cout.precision(2);
+		cout << getTotalInserts() << "    ";
+		
+		if(getTotalInserts() < 10)
+			cout << " ";
+		cout << fixed << getSuccessfulInserts() / array.size() << "        " << getSuccessfulInserts() << "      ";
+		
+		if(getSuccessfulInserts() < 10)
+			cout << " ";
+		cout << getUnsuccessfulInserts() << "        ";
+		
+		if(getUnsuccessfulInserts() < 10)
+			cout << " ";
 
-		cout << "Total Probes: " << getProbes() << endl;
-		cout << "Probe Avg: " << setprecision(3) << getProbeAvg() << endl;
-		cout << "Max: " << getMaxProbes() << endl << endl;
+		cout << getProbes() << "       ";
+		if(getProbes() < 10)
+			cout << " ";
+		cout << fixed << getProbeAvg() << "    " << getMaxProbes() << "        ";
+		if(getMaxProbes() < 10)
+			cout << " ";
+
 
 		getClusterStatistics();
-		cout << "Clusters: " << getTotalClusters() << endl;
-		cout << "Cluster Avg: " << setprecision(3) << getClusterAvg() << endl;
-		cout << "Max: " << getMaxCluster() << endl << endl << endl << endl;
+		cout << getTotalClusters() << "   " << fixed << getClusterAvg() << "       ";
+		if(getClusterAvg() < 10)
+			cout << " ";
+		cout << getMaxCluster() << endl;
 
 	}
 
     enum EntryType { ACTIVE, EMPTY, DELETED };
+	
+	//For classifying probe method
 	enum ProbeType { LINEAR, QUADRATIC, DOUBLE };
 
   private:
@@ -225,6 +269,14 @@ class HashTable
         return currentPos;
     }
 
+	/**********************************************************************
+	* Name: myhash
+	* PreCondition: None
+	*
+	* PostCondition: Returns the position of the next available index
+	*according to the probing method, or returns an invalid index to signify
+	*a failed insertion
+	*********************************************************************/
     int myhash( const HashedObj & x )
     {
 		int hashed = x % array.size();
@@ -242,13 +294,11 @@ class HashTable
 			i++;
 			maxProbes++;
 			
-			//cout << "-- Collision at index " << finalHashed << endl;
-			if(match(allKeys, finalHashed)) {
-				//cout << "FAILURE!!!!\n";
+			if(match(allKeys, finalHashed)) 
 				return array.size() + 1;
-			} else {
+			else 
 				allKeys[keyNum] = finalHashed;
-			}
+			
 			keyNum++;
 
 			finalHashed = (hashed + hash(x, i)) % array.size();
@@ -258,12 +308,19 @@ class HashTable
 			currentMaxProbes = maxProbes;
 
 
-		//delete allKeys;
-		//allKeys = NULL;
+		delete allKeys;
+		allKeys = NULL;
 
         return finalHashed;
     }
 
+	/**********************************************************************
+	* Name: match
+	* PreCondition: None
+	*
+	* PostCondition: Verifies whether or not the provided array contains
+	*the desired key
+	*********************************************************************/
 	bool match(int keys[], int key) {
 
 		for(int i = 0; i < array.size(); i++) {
@@ -273,6 +330,12 @@ class HashTable
 		return false;
 	}
 
+	/**********************************************************************
+	* Name: hash
+	* PreCondition: None
+	*
+	* PostCondition: Hashes the object according to the probe type
+	*********************************************************************/
 	int hash(const HashedObj &x, int probe) const {
 		switch (m_ProbeType) {
 		case LINEAR:

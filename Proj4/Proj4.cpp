@@ -1,9 +1,22 @@
+/**************************************************************
+* File:     Proj4.cpp
+* Project:  CMSC 341 - Project 4
+* Author:   Paolo Frias
+* Due Date: 18-November-2014
+* Section:  Lecture-02
+* E-mail:   pfrias2@umbc.edu
+*
+* Driver for Proj4. Creates a ProbingSimulation object and runs
+*through the probe testing
+*************************************************************/
+
+#include "ProbingSimulation.h"
 #include <iostream>
 #include <fstream>
 #include <cstdlib>
 #include <string>
 #include <vector>
-#include "ProbingSimulation.h"
+
 
 using namespace std;
 
@@ -21,7 +34,6 @@ int main(int argc, char* argv[]) {
 
 	PS->ReadInput();
 	PS->RunTests();
-	cout << "Done testing. Now Comparing results...\n";
 
 	delete PS;
 	PS = NULL;

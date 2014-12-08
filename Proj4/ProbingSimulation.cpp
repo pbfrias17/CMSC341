@@ -1,7 +1,18 @@
+/**************************************************************
+* File:     ProbingSimulation.cpp
+* Project:  CMSC 341 - Project 4
+* Author:   Paolo Frias
+* Due Date: 18-November-2014
+* Section:  Lecture-02
+* E-mail:   pfrias2@umbc.edu
+*
+* ProbingSimulation class implementation
+*************************************************************/
+
 #include "ProbingSimulation.h"
 #include <fstream>
 #include <iostream>
-#include <fstream>
+
 
 using namespace std;
 
@@ -18,18 +29,23 @@ ProbingSimulation::ProbingSimulation(string inputFilename, int N, int interval, 
 	LinearHashTable = new HashTable<int>(1, m_hashSize);
 	QuadraticHashTable = new HashTable<int>(2, m_hashSize);
 	DoubleHashTable = new HashTable<int>(3, m_hashSize, m_largestPrime);
-
-	//QuadraticHashTable = new HashTable<int>(m_hashSize);
-
 }
 
 ProbingSimulation::~ProbingSimulation() {
-	//randInts = NULL;
-	//delete[] randInts;
+	delete[] randInts;
+	randInts = NULL;
+
+	delete LinearHashTable;
+	LinearHashTable = NULL;
+
+	delete QuadraticHashTable;
+	QuadraticHashTable = NULL;
+
+	delete DoubleHashTable;
+	DoubleHashTable = NULL;
 }
 
 void ProbingSimulation::ReadInput() {
-	cout << "Reading in random integers from " << m_inputFile << endl;
 
 	ifstream inputFile;
 	inputFile.open(m_inputFile.c_str(), ios_base::in);
@@ -51,12 +67,13 @@ void ProbingSimulation::ReadInput() {
 
 void ProbingSimulation::RunTests() {
 
-	cout << "Linear Probing Analysis (Table size = " << m_hashSize << ")\n";
+	cout << "Linear Probing Analysis(Table size = " << m_hashSize << ")\n";		
+	cout << "             --- Inserts ---   ------- Probing -------    ----- Clusters ------\n";
+	cout << "N   Lambda   Success  Failed     Total    Avg      Max    Amount    Avg     Max\n";
 	int i = 0;
 	HashTable<int> *FinalHashTable = LinearHashTable;
 	while(randInts[i] != NULL) {
 		LinearHashTable->incrementN();
-		//cout << LinearHashTable->getCurrentN() << " Looking at " << randInts[i] << endl;
 		LinearHashTable->insert(randInts[i]);
 		i++;
 		if (i % m_interval == 0)
@@ -65,9 +82,10 @@ void ProbingSimulation::RunTests() {
 	
 	
 	cout << "Quadratic Probing Analysis (Table size = " << m_hashSize << ")\n";
+	cout << "             --- Inserts ---   ------- Probing -------    ----- Clusters ------\n";
+	cout << "N   Lambda   Success  Failed    Total    Avg      Max    Amount    Avg     Max\n";
 	i = 0;
 	while(randInts[i] != NULL) {
-		//cout << "Looking at " << randInts[i] << endl;
 		QuadraticHashTable->insert(randInts[i]);
 		i++;
 		if (i % m_interval == 0)
@@ -75,9 +93,10 @@ void ProbingSimulation::RunTests() {
 	}
 
 	cout << "Doublehash Probing Analysis (Table size = " << m_hashSize << ")\n";
+	cout << "             --- Inserts ---   ------- Probing -------    ----- Clusters ------\n";
+	cout << "N   Lambda   Success  Failed     Total    Avg      Max    Amount    Avg     Max\n";
 	i = 0;
 	while (randInts[i] != NULL) {
-		//cout << "Looking at " << randInts[i] << endl;
 		DoubleHashTable->insert(randInts[i]);
 		i++;
 		if(i % m_interval == 0)
