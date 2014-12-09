@@ -20,11 +20,17 @@ public:
 private:
 	int m_cities;
 	int m_roads;
+	int m_startCity;
+	int m_endCity;
 	int **m_Matrix;	
 	
 	bool *m_Known;
 	int *m_Parent;
 	int *m_Weight;
+
+	void traverse(int city);
+	int getNext();
+	int trace(int end);
 
 
 };

@@ -50,7 +50,17 @@ void Graph::init(string inputFile) {
 		}
 
 		//create search tables
+		m_Known = new bool[m_cities];
+		for(int i = 0; i < m_cities; i++)
+			m_Known[i] = false;
 
+		m_Parent = new int[m_cities];
+		for(int i = 0; i < m_cities; i++)
+			m_Parent[i] = 0;
+
+		m_Weight = new int[m_cities];
+		for(int i = 0; i < m_cities; i++)
+			m_Weight[i] = 0;
 
 	}
 
@@ -68,10 +78,74 @@ void Graph::printMatrix() {
 
 int Graph::trips(int start, int end, int tourists) {
 	cout << "Calculating total number of trips\n";
+	start--;
+	end--;
 
+	m_startCity = start;
+	m_endCity = end;
+	
+	//indicate starting city
+	m_Known[start] = true;
+	m_Parent[start] = -1;
+	m_Weight[start] = 0;
+	
+	traverse(start);
+
+	m_Matrix[end]
 
 	return 1;
 }
+
+void Graph::traverse(int city) {
+	cout << "Finding the next neighbor of city " << city + 1 << endl;
+	for(int i = 0; i < m_cities; i++) {
+		int neighbor = i;
+		int weight = m_Matrix[city][neighbor];
+		if(weight != 0) {
+			cout << "\tChecking neighbor of " << city + 1 << ": " << neighbor + 1 << endl;
+			if(m_Known[neighbor] != true) {
+				cout << "\tIt is NOT KNOWN\n";
+				if(weight > m_Weight[neighbor]) {
+					cout << "\t" << weight << " > " << m_Weight[neighbor] << " ...updating\n";
+					m_Weight[neighbor] = weight;
+					m_Parent[neighbor] = city;
+				}
+			}
+		}
+	}
+	int next = getNext();
+	if(next != -1) {
+		m_Known[next] = true;
+		if(next != m_endCity)
+			traverse(next);
+
+	}
+
+}
+
+int Graph::getNext() {
+	cout << "Now finding the next largest unknown weighted city\n";
+	int max = 0;
+	int maxCity = -1;
+	for(int i = 0; i < m_cities; i++) {
+		if(m_Known[i] != true && m_Weight[i] > max) {
+			max = m_Weight[i];
+			maxCity = i;
+		}
+	}
+	cout << "\tCity " << maxCity + 1 << " with a weight of " << max << " seems to be next\n";
+
+	int stopper;
+	cin >> stopper;
+
+	return maxCity;
+}
+
+int Graph::trace(int end) {
+
+}
+
+
 
 
 

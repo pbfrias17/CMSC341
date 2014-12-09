@@ -11,4 +11,7 @@ int main(int argc, char *argv[])
 	cin>> s >> d >> t;
 	//print the minimum number of trips
 	cout<<"Minimum Number of Trip: "<<mygraph.trips(s,d,t) <<endl;
+
+	int stopper;
+	cin >> stopper;
 }
