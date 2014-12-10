@@ -1,8 +1,19 @@
+/**************************************************************
+* File:    Graph.cpp
+* Project  CMSC 341 - Project 5 - Graph Traversals
+* Author   Paolo B. Frias
+* Due Date 09-December-2014
+* Section  Lecture-02
+* E-mail   pfrias2@umbc.edu
+*
+* Graph class implementation
+*************************************************************/
+
 #include "Graph.h"
 
 
 Graph::Graph() {
-
+	this->init("input.txt");
 }
 
 Graph::Graph(string inputFile) {
@@ -11,7 +22,6 @@ Graph::Graph(string inputFile) {
 }
 
 void Graph::init(string inputFile) {
-	//initialize adjacency matrix
 	ifstream file;
 	file.open(inputFile.c_str(), ios_base::in);
 
@@ -24,26 +34,27 @@ void Graph::init(string inputFile) {
 		m_cities = num;
 		file >> num;
 		m_roads = num;
-		cout << "There are " << m_cities << " cities and " << m_roads << " roads\n";
+
 		//initialize matrix
 		m_Matrix = new int*[m_cities];
 		for (int i = 0; i < m_cities; ++i)
 			m_Matrix[i] = new int[m_cities];
 
-		for (unsigned int from = 0; from < m_cities; from++) {
-			for (unsigned int to = 0; to < m_cities; to++) {
+		for (int from = 0; from < m_cities; from++) {
+			for (int to = 0; to < m_cities; to++) {
 				m_Matrix[from][to] = 0;
 			}
 		}
 
 		//fill matrix
 		while (file >> num) {
+			
 			int start = num - 1;
 			file >> num;
 			int end = num - 1;
 			file >> num;
 			int weight = num - 1;
-			cout << "From " << start << " to " << end << " holds " << weight << " (+ Mr.T)" << endl;
+
 			m_Matrix[start][end] = weight;
 			m_Matrix[end][start] = weight;
 
@@ -66,18 +77,8 @@ void Graph::init(string inputFile) {
 
 }
 
-void Graph::printMatrix() {
-	for(int i = 0; i < m_cities; i++) {
-		for (int j = 0; j < m_cities; j++) {
-			cout << m_Matrix[i][j] << " ";
-		}
-		cout << "\n";
-
-	}
-}
-
 int Graph::trips(int start, int end, int tourists) {
-	cout << "Calculating total number of trips\n";
+	//adjust for index
 	start--;
 	end--;
 
@@ -91,40 +92,41 @@ int Graph::trips(int start, int end, int tourists) {
 	
 	traverse(start);
 
-	m_Matrix[end]
+	int minWeight = 0;
+	minWeight = getMinimum(m_endCity, minWeight);
 
-	return 1;
+	delete m_Known;
+	delete m_Parent;
+	delete m_Weight;
+
+	return ceil((float)tourists / (float)minWeight);
 }
 
 void Graph::traverse(int city) {
-	cout << "Finding the next neighbor of city " << city + 1 << endl;
+
 	for(int i = 0; i < m_cities; i++) {
 		int neighbor = i;
 		int weight = m_Matrix[city][neighbor];
 		if(weight != 0) {
-			cout << "\tChecking neighbor of " << city + 1 << ": " << neighbor + 1 << endl;
 			if(m_Known[neighbor] != true) {
-				cout << "\tIt is NOT KNOWN\n";
 				if(weight > m_Weight[neighbor]) {
-					cout << "\t" << weight << " > " << m_Weight[neighbor] << " ...updating\n";
 					m_Weight[neighbor] = weight;
 					m_Parent[neighbor] = city;
 				}
 			}
 		}
 	}
+
 	int next = getNext();
 	if(next != -1) {
 		m_Known[next] = true;
 		if(next != m_endCity)
 			traverse(next);
-
 	}
-
 }
 
 int Graph::getNext() {
-	cout << "Now finding the next largest unknown weighted city\n";
+	
 	int max = 0;
 	int maxCity = -1;
 	for(int i = 0; i < m_cities; i++) {
@@ -133,16 +135,22 @@ int Graph::getNext() {
 			maxCity = i;
 		}
 	}
-	cout << "\tCity " << maxCity + 1 << " with a weight of " << max << " seems to be next\n";
-
-	int stopper;
-	cin >> stopper;
 
 	return maxCity;
 }
 
-int Graph::trace(int end) {
+int Graph::getMinimum(int parent, int &currMin) {
+	if(parent == m_endCity)
+		currMin = m_Weight[parent];
 
+	if(parent == m_startCity) {
+		return currMin;
+	} else {
+		if(0 < m_Weight[parent] && m_Weight[parent] < currMin)
+			currMin = m_Weight[parent];
+
+		return(getMinimum(m_Parent[parent], currMin));
+	}
 }
 
 
